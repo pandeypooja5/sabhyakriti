@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -16,9 +17,11 @@ from infrastructure.persistence.models import Base
 # Alembic Config object
 config = context.config
 
-# Set the SQLAlchemy URL from application settings
-settings = get_settings()
-database_url = settings.database_primary_url
+# Set the SQLAlchemy URL from environment variable (fallback to settings)
+database_url = os.getenv("DATABASE_PRIMARY_URL") or os.getenv("DATABASE_URL")
+if not database_url:
+    settings = get_settings()
+    database_url = settings.database_primary_url
 # Ensure async driver is used
 database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 config.set_main_option("sqlalchemy.url", database_url)
@@ -38,7 +41,7 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
         include_schemas=True,
-        version_table_schema="order",
+        version_table_schema="orders",
     )
 
     with context.begin_transaction():
@@ -50,7 +53,7 @@ def do_run_migrations(connection: Connection) -> None:
         connection=connection,
         target_metadata=target_metadata,
         include_schemas=True,
-        version_table_schema="order",
+        version_table_schema="orders",
     )
     with context.begin_transaction():
         context.run_migrations()

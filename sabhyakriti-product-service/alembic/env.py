@@ -23,7 +23,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 # Override sqlalchemy.url from environment variable if set
-db_url = os.getenv("DATABASE_PRIMARY_URL")
+db_url = os.getenv("DATABASE_PRIMARY_URL") or os.getenv("DATABASE_URL")
 if db_url:
     # Ensure async driver is used
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
