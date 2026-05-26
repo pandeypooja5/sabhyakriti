@@ -44,6 +44,8 @@ def init_db(database_url: str | None = None) -> None:
     global _engine, _session_factory
 
     url = database_url or os.environ["DATABASE_URL"]
+    # Ensure async driver is used
+    url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
     _engine = create_async_engine(
         url,

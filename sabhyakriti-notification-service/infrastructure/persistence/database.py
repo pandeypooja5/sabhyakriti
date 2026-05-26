@@ -19,6 +19,9 @@ def init_db(database_url: str) -> None:
     """Create the async engine and session factory from the given URL."""
     global _engine, _async_session_factory
 
+    # Ensure async driver is used
+    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
     _engine = create_async_engine(
         database_url,
         echo=False,

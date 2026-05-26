@@ -25,6 +25,10 @@ def create_engines(
     Returns:
         Tuple of (primary_engine, replica_engine).
     """
+    # Ensure async driver is used
+    primary_url = primary_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    replica_url = replica_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
     common_kwargs = {
         "pool_size": pool_size,
         "max_overflow": max_overflow,

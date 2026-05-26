@@ -33,6 +33,8 @@ def init_db(database_url: str) -> None:
     Must be called once during application startup before any DB calls.
     """
     global _engine, _session_factory  # noqa: PLW0603
+    # Ensure async driver is used
+    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
     _engine = create_async_engine(
         database_url,
         echo=False,

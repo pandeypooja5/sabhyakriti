@@ -20,6 +20,8 @@ config = context.config
 # Override database URL from env var if set (useful for CI/CD)
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
+    # Ensure async driver is used
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
     config.set_main_option("sqlalchemy.url", db_url)
 
 # Interpret the config file for Python logging

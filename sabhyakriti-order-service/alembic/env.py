@@ -18,7 +18,10 @@ config = context.config
 
 # Set the SQLAlchemy URL from application settings
 settings = get_settings()
-config.set_main_option("sqlalchemy.url", settings.database_primary_url)
+database_url = settings.database_primary_url
+# Ensure async driver is used
+database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+config.set_main_option("sqlalchemy.url", database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

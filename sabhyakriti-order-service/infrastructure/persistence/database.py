@@ -23,6 +23,8 @@ from config import Settings
 
 
 def _create_engine(url: str, echo: bool = False) -> AsyncEngine:
+    # Ensure async driver is used
+    url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
     return create_async_engine(
         url,
         echo=echo,
