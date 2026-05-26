@@ -1,5 +1,1 @@
-{
-  "deploy": {
-    "preDeployCommand": "cd /app && alembic upgrade head"
-  }
-}
+{}
