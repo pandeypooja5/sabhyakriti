@@ -1,4 +1,5 @@
 {
+  "buildCommand": "echo 'Build skipped - using pre-built dist'",
   "outputDirectory": "dist",
   "rewrites": [
     {
