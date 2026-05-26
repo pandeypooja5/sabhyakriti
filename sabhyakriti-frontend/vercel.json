@@ -1,4 +1,6 @@
 {
+  "buildCommand": "echo 'Skipping build - using pre-built dist'",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/api/v1/auth/:path*",
