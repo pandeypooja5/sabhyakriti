@@ -1,0 +1,79 @@
+name: Auth Service CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths: ["sabhyakriti-auth-service/**"]
+  pull_request:
+    branches: [main]
+    paths: ["sabhyakriti-auth-service/**"]
+
+env:
+  ECR_REPO: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/sabhyakriti/auth-service
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: sabhyakriti_auth_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements-dev.txt
+        working-directory: sabhyakriti-auth-service
+      - run: ruff check .
+        working-directory: sabhyakriti-auth-service
+      - run: mypy . --strict
+        working-directory: sabhyakriti-auth-service
+      - run: pytest
+        working-directory: sabhyakriti-auth-service
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/sabhyakriti_auth_test
+          REDIS_URL: redis://localhost:6379/0
+          ENVIRONMENT: test
+
+  build-push:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ap-south-1
+      - uses: aws-actions/amazon-ecr-login@v2
+      - run: |
+          docker build --platform linux/amd64 \
+            -t $ECR_REPO:${{ github.sha }} \
+            -t $ECR_REPO:latest \
+            sabhyakriti-auth-service/
+          docker push $ECR_REPO:${{ github.sha }}
+          docker push $ECR_REPO:latest
+      - name: Deploy to EC2
+        run: |
+          aws ssm send-command \
+            --instance-ids ${{ secrets.AUTH_EC2_INSTANCE_ID }} \
+            --document-name "AWS-RunShellScript" \
+            --parameters commands='[
+              "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REPO",
+              "docker pull $ECR_REPO:${{ github.sha }}",
+              "docker stop auth-service || true",
+              "docker rm auth-service || true",
+              "docker run -d --name auth-service -p 8001:8001 --env-file /etc/sabhyakriti/auth.env --restart unless-stopped $ECR_REPO:${{ github.sha }}"
+            ]'

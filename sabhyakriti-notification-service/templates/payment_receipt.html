@@ -1,0 +1,75 @@
+{% extends "base_email.html" %}
+
+{% block title %}Payment Receipt for Order #{{ order_number }} — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Hello, {{ full_name }},</p>
+
+<p>
+  Thank you for your payment. This email serves as your official receipt for the
+  transaction related to order <strong>#{{ order_number }}</strong>.
+</p>
+
+<!-- Receipt Table -->
+<h3 style="font-size:15px; color:#1B4B5A; margin:24px 0 12px 0;">Payment Details</h3>
+<table class="data-table">
+  <tbody>
+    <tr>
+      <td><strong>Payment ID</strong></td>
+      <td class="text-right">{{ payment_id }}</td>
+    </tr>
+    <tr>
+      <td><strong>Order Number</strong></td>
+      <td class="text-right">#{{ order_number }}</td>
+    </tr>
+    <tr>
+      <td><strong>Payment Method</strong></td>
+      <td class="text-right">{{ method }}</td>
+    </tr>
+    <tr>
+      <td><strong>Date &amp; Time</strong></td>
+      <td class="text-right">
+        {{ captured_at.strftime('%d %B %Y, %I:%M %p IST') if captured_at else 'N/A' }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Amount Breakdown -->
+<h3 style="font-size:15px; color:#1B4B5A; margin:24px 0 12px 0;">Amount Breakdown</h3>
+<table class="data-table">
+  <tbody>
+    <tr>
+      <td>Amount (excl. GST)</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format((amount|float - gst_amount|float)) }}</td>
+    </tr>
+    <tr>
+      <td>GST (18%)</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(gst_amount|float) }}</td>
+    </tr>
+    <tr class="total-row">
+      <td>Total Charged</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(amount|float) }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="info-box">
+  <p>
+    This is a computer-generated receipt and does not require a physical signature.
+    Please retain this email for your records.
+  </p>
+</div>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/orders/{{ order_number }}" class="btn">View Order</a>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  For any payment-related queries, contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>
+  quoting your Payment ID: <strong>{{ payment_id }}</strong>.
+</p>
+{% endblock %}

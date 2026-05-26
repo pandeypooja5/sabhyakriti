@@ -1,0 +1,56 @@
+{% extends "base_email.html" %}
+
+{% block title %}Return #{{ return_id }} Received — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Hello, {{ full_name }},</p>
+
+<p>
+  We have received your return for order <strong>#{{ order_number }}</strong>.
+  Our quality team will inspect the returned items and update you within
+  <strong>2&ndash;3 business days</strong>.
+</p>
+
+<div class="info-box">
+  <p>Return ID: <strong class="highlight">{{ return_id }}</strong></p>
+  <p style="margin-top:8px;">Original Order: <strong>#{{ order_number }}</strong></p>
+</div>
+
+<!-- Returned Items -->
+<h3 style="font-size:15px; color:#1B4B5A; margin:24px 0 10px 0;">Items Returned</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Item Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr class="divider" />
+
+<!-- Next Steps -->
+<h3 style="font-size:15px; color:#1B4B5A; margin:24px 0 10px 0;">What Happens Next?</h3>
+<p>1. Our quality team will inspect your returned items.</p>
+<p>2. You will receive an approval or rejection email within 2&ndash;3 business days.</p>
+<p>3. If approved, your refund will be processed within 3&ndash;5 business days.</p>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/returns/{{ return_id }}" class="btn">Track Return Status</a>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  Need help? Contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>.
+</p>
+{% endblock %}

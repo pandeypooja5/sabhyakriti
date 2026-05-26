@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  admin-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sabhyakriti/admin-service:dev
+    container_name: sabhyakriti-admin-service
+    ports:
+      - "8007:8007"
+    env_file:
+      - .env.example
+    environment:
+      - LOG_LEVEL=DEBUG
+      - PORT=8007
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8007/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

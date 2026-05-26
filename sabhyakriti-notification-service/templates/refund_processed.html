@@ -1,0 +1,56 @@
+{% extends "base_email.html" %}
+
+{% block title %}Refund Processed for Order #{{ order_number }} — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Hello, {{ full_name }},</p>
+
+<p>
+  Your refund for order <strong>#{{ order_number }}</strong> has been successfully
+  processed and is on its way to your account.
+</p>
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+  <p style="margin-top:8px;">
+    Refund Amount: <strong class="highlight" style="font-size:20px;">&#8377;{{ "%.2f"|format(refund_amount|float) }}</strong>
+  </p>
+  <p style="margin-top:8px;"><strong>Status:</strong> <span style="color:#22a06b; font-weight:700;">Processed</span></p>
+</div>
+
+<hr class="divider" />
+
+<p>
+  The amount of <strong>&#8377;{{ "%.2f"|format(refund_amount|float) }}</strong> has been
+  released from our end. Expected credit timeline:
+</p>
+
+<table class="data-table">
+  <tbody>
+    <tr>
+      <td>UPI / Net Banking</td>
+      <td class="text-right">1&ndash;3 business days</td>
+    </tr>
+    <tr>
+      <td>Credit / Debit Card</td>
+      <td class="text-right">3&ndash;7 business days</td>
+    </tr>
+    <tr>
+      <td>Sabhyakriti Wallet</td>
+      <td class="text-right">Instant</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/orders/{{ order_number }}" class="btn">View Order</a>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If you have not received your refund after the expected timeline, contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>
+  with your order number for assistance.
+</p>
+{% endblock %}

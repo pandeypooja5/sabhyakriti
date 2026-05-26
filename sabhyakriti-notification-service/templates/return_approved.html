@@ -1,0 +1,46 @@
+{% extends "base_email.html" %}
+
+{% block title %}Return Approved for Order #{{ order_number }} — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Great news, {{ full_name }}!</p>
+
+<p>
+  Your return for order <strong>#{{ order_number }}</strong> has been
+  <strong style="color:#22a06b;">approved</strong> after our quality inspection.
+  Your refund is now being processed.
+</p>
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+  <p style="margin-top:8px;">
+    Refund Amount: <strong class="highlight" style="font-size:20px;">&#8377;{{ "%.2f"|format(refund_amount|float) }}</strong>
+  </p>
+  <p style="margin-top:8px;"><strong>Refund Timeline:</strong> 3&ndash;5 business days</p>
+</div>
+
+<hr class="divider" />
+
+<p>
+  The refund of <strong>&#8377;{{ "%.2f"|format(refund_amount|float) }}</strong> will be
+  credited back to your original payment method within <strong>3&ndash;5 business days</strong>
+  from the date of this email.
+</p>
+
+<p>
+  If you paid via UPI or net banking, the refund will appear in your bank account.
+  If you paid via credit or debit card, it may take up to 7 business days depending
+  on your bank's processing time.
+</p>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/orders/{{ order_number }}" class="btn">View Order Details</a>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If you have not received your refund after the stated timeframe, please contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>.
+</p>
+{% endblock %}

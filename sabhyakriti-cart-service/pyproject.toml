@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "sabhyakriti-cart-service"
+version = "1.0.0"
+description = "Cart microservice for Sabhyakriti Saree eCommerce platform"
+requires-python = ">=3.11"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ANN", # flake8-annotations
+    "S",   # flake8-bandit
+    "N",   # pep8-naming
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "ANN101", # missing type annotation for self
+    "ANN102", # missing type annotation for cls
+    "S101",   # use of assert (needed for tests)
+    "ANN401", # dynamically typed expressions (Any)
+]
+exclude = ["alembic/versions/"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["domain", "application", "infrastructure", "presentation"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+exclude = ["alembic/", "tests/"]
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = [
+    "--cov=domain",
+    "--cov=application",
+    "--cov=infrastructure",
+    "--cov=presentation",
+    "--cov-report=term-missing",
+    "--cov-report=html:coverage_html",
+    "--cov-fail-under=80",
+    "-v",
+]
+
+[tool.coverage.run]
+source = ["domain", "application", "infrastructure", "presentation"]
+omit = ["*/tests/*", "*/alembic/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true

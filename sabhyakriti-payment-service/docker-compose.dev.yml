@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  payment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sabhyakriti-payment-service
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://sabhyakriti:password@postgres:5432/sabhyakriti
+      - ORDER_SERVICE_URL=http://host.docker.internal:8001
+      - NOTIFICATION_SERVICE_URL=http://host.docker.internal:8006
+      - INTERNAL_SERVICE_SECRET=dev-internal-secret
+      - JWT_PUBLIC_KEY_URL=http://host.docker.internal:8000/.well-known/jwks.json
+      - AWS_REGION=ap-south-1
+      - SECRETS_MANAGER_RAZORPAY_KEY_ID=sabhyakriti/payment/razorpay_key_id
+      - SECRETS_MANAGER_RAZORPAY_KEY_SECRET=sabhyakriti/payment/razorpay_key_secret
+      - SECRETS_MANAGER_RAZORPAY_WEBHOOK_SECRET=sabhyakriti/payment/razorpay_webhook_secret
+      - FRONTEND_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=DEBUG
+      - APP_ENV=development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: sabhyakriti-payment-postgres
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: sabhyakriti
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sabhyakriti
+    volumes:
+      - payment_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sabhyakriti -d sabhyakriti"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  payment_postgres_data:

@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  cart-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sabhyakriti-cart-service
+    ports:
+      - "8003:8003"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://cart_user:cart_pass@postgres:5432/sabhyakriti
+      PRODUCT_SERVICE_URL: http://host.docker.internal:8001
+      ORDER_SERVICE_URL: http://host.docker.internal:8002
+      INTERNAL_SERVICE_SECRET: dev-secret-do-not-use-in-prod
+      JWT_PUBLIC_KEY_URL: http://host.docker.internal:8000/.well-known/jwks.json
+      FRONTEND_ORIGIN: http://localhost:3000
+      AWS_REGION: ap-south-1
+      LOG_LEVEL: DEBUG
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - sabhyakriti-dev
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8003 --reload
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: sabhyakriti-cart-postgres
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: cart_user
+      POSTGRES_PASSWORD: cart_pass
+      POSTGRES_DB: sabhyakriti
+    volumes:
+      - cart_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cart_user -d sabhyakriti"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sabhyakriti-dev
+
+volumes:
+  cart_postgres_data:
+
+networks:
+  sabhyakriti-dev:
+    driver: bridge

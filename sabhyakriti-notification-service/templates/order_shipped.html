@@ -1,0 +1,45 @@
+{% extends "base_email.html" %}
+
+{% block title %}Your Order #{{ order_number }} Has Shipped — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Great news, {{ full_name }}!</p>
+
+<p>
+  Your Sabhyakriti order is on its way! Our courier partner has picked up your
+  package and it is headed to you.
+</p>
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+  <p style="margin-top:8px;">Courier: <strong>{{ courier_name }}</strong></p>
+  <p style="margin-top:8px;">
+    Tracking Number: <strong class="highlight" style="font-size:18px; letter-spacing:1px;">{{ tracking_number }}</strong>
+  </p>
+</div>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/orders/{{ order_number }}/track" class="btn">Track Your Order</a>
+</div>
+
+<hr class="divider" />
+
+<div class="warning-box">
+  <p>
+    <strong>Estimated Delivery:</strong> Most orders arrive within 5&ndash;7 business days
+    depending on your location. Remote areas may take up to 10 business days.
+  </p>
+</div>
+
+<p style="font-size:13px; color:#888888;">
+  You can also track your shipment directly on the <strong>{{ courier_name }}</strong> website
+  using the tracking number above.
+</p>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If you have any concerns about your shipment, please contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>.
+</p>
+{% endblock %}

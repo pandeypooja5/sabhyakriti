@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  product-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      DATABASE_PRIMARY_URL: postgresql+asyncpg://postgres:postgres@db:5432/sabhyakriti
+      DATABASE_REPLICA_URL: postgresql+asyncpg://postgres:postgres@db:5432/sabhyakriti
+      REDIS_URL: redis://redis:6379/1
+      AWS_REGION: ap-south-1
+      S3_BUCKET_NAME: sabhyakriti-product-images
+      CLOUDFRONT_DOMAIN: d1234567890abc.cloudfront.net
+      ORDER_SERVICE_INTERNAL_URL: http://order-service:8001
+      INTERNAL_SERVICE_SECRET: dev-secret-change-in-prod
+      JWT_PUBLIC_KEY_URL: http://auth-service:8000/internal/v1/auth/jwks.json
+      FRONTEND_ORIGIN: http://localhost:3000
+      LOG_LEVEL: DEBUG
+      APP_ENV: development
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sabhyakriti
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:

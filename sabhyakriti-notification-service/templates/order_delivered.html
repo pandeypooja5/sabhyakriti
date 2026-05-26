@@ -1,0 +1,47 @@
+{% extends "base_email.html" %}
+
+{% block title %}Order #{{ order_number }} Delivered — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Your order has arrived, {{ full_name }}!</p>
+
+<p>
+  We are delighted to let you know that your Sabhyakriti order has been successfully
+  delivered. We hope you love your new purchase!
+</p>
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+  <p style="margin-top:8px;">
+    Delivered on: <strong>{{ delivered_at.strftime('%d %B %Y at %I:%M %p') if delivered_at else 'Recently' }}</strong>
+  </p>
+</div>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/orders/{{ order_number }}/review" class="btn">Write a Review</a>
+</div>
+
+<hr class="divider" />
+
+<div class="warning-box">
+  <p>
+    <strong>Return Policy Reminder:</strong> If you are not completely satisfied with your
+    purchase, you may initiate a return within <strong>7 days</strong> of delivery.
+    Visit <a href="https://sabhyakriti.com/returns" style="color:#FF6B2B;">sabhyakriti.com/returns</a>
+    to start the process.
+  </p>
+</div>
+
+<p>
+  Your feedback helps us improve and supports our network of skilled artisans.
+  We would love to hear what you think of your purchase!
+</p>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  Questions? Contact us at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>
+  or visit our <a href="https://sabhyakriti.com/help" style="color:#FF6B2B;">Help Centre</a>.
+</p>
+{% endblock %}

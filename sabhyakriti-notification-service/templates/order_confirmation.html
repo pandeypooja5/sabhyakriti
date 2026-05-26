@@ -1,0 +1,86 @@
+{% extends "base_email.html" %}
+
+{% block title %}Order #{{ order_number }} Confirmed — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Thank you for your order, {{ full_name }}!</p>
+
+<p>
+  Your order has been confirmed and our artisans are preparing your items with care.
+  You will receive a shipping confirmation once your order is dispatched.
+</p>
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+</div>
+
+<!-- Order Items Table -->
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th class="text-right">Qty</th>
+      <th class="text-right">Unit Price</th>
+      <th class="text-right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.name }}</td>
+      <td class="text-right">{{ item.quantity }}</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(item.unit_price|float) }}</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(item.total_price|float) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Pricing Breakdown -->
+<table class="data-table">
+  <tbody>
+    <tr>
+      <td>Subtotal</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(subtotal|float) }}</td>
+    </tr>
+    {% if discount_amount and discount_amount > 0 %}
+    <tr>
+      <td style="color:#22a06b;">Discount</td>
+      <td class="text-right" style="color:#22a06b;">&#8722; &#8377;{{ "%.2f"|format(discount_amount|float) }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td>GST (18%)</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(gst_amount|float) }}</td>
+    </tr>
+    <tr class="total-row">
+      <td>Total</td>
+      <td class="text-right">&#8377;{{ "%.2f"|format(total|float) }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Shipping Address -->
+<h3 style="font-size:15px; color:#1B4B5A; margin:24px 0 10px 0;">Shipping Address</h3>
+<div class="info-box">
+  <p>
+    {% if shipping_address.name %}{{ shipping_address.name }}<br />{% endif %}
+    {% if shipping_address.line1 %}{{ shipping_address.line1 }}<br />{% endif %}
+    {% if shipping_address.line2 %}{{ shipping_address.line2 }}<br />{% endif %}
+    {% if shipping_address.city %}{{ shipping_address.city }}, {% endif %}
+    {% if shipping_address.state %}{{ shipping_address.state }} {% endif %}
+    {% if shipping_address.pincode %}{{ shipping_address.pincode }}<br />{% endif %}
+    {% if shipping_address.country %}{{ shipping_address.country }}{% endif %}
+  </p>
+</div>
+
+<!-- Payment Method -->
+<p><strong>Payment Method:</strong> {{ payment_method }}</p>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  Questions about your order? Reply to this email or visit our
+  <a href="https://sabhyakriti.com/help" style="color:#FF6B2B;">Help Centre</a>.
+</p>
+{% endblock %}

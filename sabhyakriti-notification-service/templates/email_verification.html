@@ -1,0 +1,40 @@
+{% extends "base_email.html" %}
+
+{% block title %}Verify Your Email — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Hello, {{ full_name }}!</p>
+
+<p>
+  Thank you for creating your Sabhyakriti account. To complete your registration
+  and start exploring our curated collection of Indian craftsmanship, please
+  verify your email address.
+</p>
+
+<div class="btn-wrapper">
+  <a href="{{ verification_link }}" class="btn">Verify Email Address</a>
+</div>
+
+<div class="info-box">
+  <p>
+    <strong>This link expires in 48 hours.</strong> If it expires, you can request
+    a new verification email from your account settings.
+  </p>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If the button above does not work, copy and paste the following URL into your browser:
+</p>
+<p style="font-size:12px; word-break:break-all; color:#1B4B5A;">
+  {{ verification_link }}
+</p>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If you did not create a Sabhyakriti account, you can safely ignore this email.
+  No account will be created without verification.
+</p>
+{% endblock %}

@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sabhyakriti-order-service
+    ports:
+      - "8004:8004"
+    environment:
+      DATABASE_PRIMARY_URL: postgresql+asyncpg://postgres:password@postgres:5432/sabhyakriti
+      DATABASE_REPLICA_URL: postgresql+asyncpg://postgres:password@postgres:5432/sabhyakriti
+      CART_SERVICE_URL: http://host.docker.internal:8002
+      PRODUCT_SERVICE_URL: http://host.docker.internal:8001
+      PAYMENT_SERVICE_URL: http://host.docker.internal:8005
+      NOTIFICATION_SERVICE_URL: http://host.docker.internal:8006
+      INTERNAL_SERVICE_SECRET: dev-internal-secret
+      JWT_PUBLIC_KEY_URL: http://host.docker.internal:8000/api/v1/auth/jwks
+      SELLER_GSTIN: 29ABCDE1234F1Z5
+      SELLER_ADDRESS: "123 Silk Market, Bengaluru, Karnataka - 560001"
+      FRONTEND_ORIGIN: http://localhost:3000
+      LOG_LEVEL: DEBUG
+      APP_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    networks:
+      - sabhyakriti-net
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: sabhyakriti-order-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sabhyakriti
+    volumes:
+      - order_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sabhyakriti"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sabhyakriti-net
+
+volumes:
+  order_pg_data:
+
+networks:
+  sabhyakriti-net:
+    driver: bridge

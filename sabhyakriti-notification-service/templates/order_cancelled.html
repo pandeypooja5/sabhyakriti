@@ -1,0 +1,43 @@
+{% extends "base_email.html" %}
+
+{% block title %}Order #{{ order_number }} Cancelled — Sabhyakriti{% endblock %}
+
+{% block body %}
+<p class="greeting">Hello, {{ full_name }},</p>
+
+<p>
+  We want to confirm that your Sabhyakriti order <strong>#{{ order_number }}</strong>
+  has been cancelled as requested.
+</p>
+
+{% if reason %}
+<div class="info-box">
+  <p><strong>Cancellation reason:</strong> {{ reason }}</p>
+</div>
+{% endif %}
+
+<div class="info-box">
+  <p>Order Number: <strong class="highlight">{{ order_number }}</strong></p>
+  <p style="margin-top:8px;"><strong>Status:</strong> Cancelled</p>
+</div>
+
+<hr class="divider" />
+
+<p>
+  <strong>Refund Information:</strong> If a payment was made for this order, your refund
+  will be processed within <strong>5&ndash;7 business days</strong> and credited back to
+  your original payment method.
+</p>
+
+<div class="btn-wrapper">
+  <a href="https://sabhyakriti.com/shop" class="btn">Continue Shopping</a>
+</div>
+
+<hr class="divider" />
+
+<p style="font-size:13px; color:#888888;">
+  If you did not request this cancellation or have any questions, please contact our
+  support team immediately at
+  <a href="mailto:support@sabhyakriti.com" style="color:#FF6B2B;">support@sabhyakriti.com</a>.
+</p>
+{% endblock %}
