@@ -129,4 +129,5 @@ class WebhookEventModel(Base):
             "WebhookEventModel.razorpay_payment_id == foreign(PaymentModel.razorpay_payment_id)"
         ),
         lazy="noload",
+        viewonly=True,
     )
