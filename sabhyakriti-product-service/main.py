@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -65,7 +66,7 @@ class Settings(BaseSettings):
     frontend_origin: str = "http://localhost:3000"
     log_level: str = "INFO"
     app_env: str = "development"
-    app_port: int = 8002
+    app_port: int = int(os.getenv("PORT", 8000))
 
 
 # ---------------------------------------------------------------------------

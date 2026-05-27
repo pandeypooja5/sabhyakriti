@@ -106,7 +106,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.warning("internal_secret_is_default_value_change_in_production")
     app.state.internal_secret = internal_secret
 
-    logger.info("notification_service_started", port=8006)
+    logger.info("notification_service_started", port=int(os.getenv("PORT", 8000)))
 
     yield  # ── Application is running ──────────────────────────────────────────
 

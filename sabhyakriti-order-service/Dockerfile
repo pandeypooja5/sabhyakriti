@@ -28,6 +28,8 @@ COPY --chown=appuser:appgroup . .
 # Switch to non-root user
 USER appuser
 
-EXPOSE 8004
+EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8004", "--workers", "2"]
+ENV PORT=8000
+
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT} --workers 2"]
