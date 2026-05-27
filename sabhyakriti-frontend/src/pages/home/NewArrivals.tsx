@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import type { Product } from '@/types';
 import { listProducts } from '@/services/productService';
 import ProductCard from '@/components/product/ProductCard';
@@ -18,20 +18,19 @@ const NewArrivals: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-12 bg-[#FAFAFA]" data-testid="new-arrivals">
+    <section className="py-16 bg-ivory-100" data-testid="new-arrivals">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-saffron-500" />
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">New Arrivals</h2>
-              <p className="text-sm text-gray-500 mt-0.5">Just added to our collection</p>
-            </div>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="font-cormorant text-sm text-gold-600 italic tracking-widest uppercase mb-2">
+              Fresh from the Loom
+            </p>
+            <h2 className="font-playfair text-4xl sm:text-5xl font-normal text-brand-text">New Arrivals</h2>
           </div>
           <Link
             to="/sarees?sort=newest"
             data-testid="new-arrivals-view-all"
-            className="text-sm font-medium text-saffron-500 hover:text-saffron-600 flex items-center gap-1"
+            className="text-sm font-medium text-gold-700 hover:text-gold-800 flex items-center gap-1"
           >
             View All <ChevronRight className="h-4 w-4" />
           </Link>

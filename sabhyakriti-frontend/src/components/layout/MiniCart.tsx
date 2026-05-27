@@ -20,17 +20,17 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
   return (
     <div
       data-testid="mini-cart"
-      className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 z-50 animate-slide-up"
+      className="absolute right-0 top-full mt-2 w-80 bg-ivory-100 rounded shadow-xl border border-ivory-400 z-50 animate-slide-up"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-ivory-400">
+        <h3 className="font-semibold text-brand-text flex items-center gap-2">
           <ShoppingCart className="h-4 w-4" /> Cart ({items.length})
         </h3>
         <button
           onClick={onClose}
           data-testid="mini-cart-close"
-          className="text-gray-400 hover:text-gray-600"
+          className="text-brand-textMuted hover:text-brand-text"
           aria-label="Close cart"
         >
           <X className="h-4 w-4" />
@@ -39,12 +39,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
 
       {/* Items */}
       {displayItems.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">
-          <ShoppingCart className="h-10 w-10 mx-auto mb-2 text-gray-300" />
+        <div className="py-8 text-center text-sm text-brand-textMuted">
+          <ShoppingCart className="h-10 w-10 mx-auto mb-2 text-ivory-400" />
           Your cart is empty
         </div>
       ) : (
-        <ul className="divide-y divide-gray-50 max-h-64 overflow-y-auto">
+        <ul className="divide-y divide-ivory-200 max-h-64 overflow-y-auto">
           {displayItems.map((item) => {
             const img = item.product.images.find((i) => i.isPrimary) ?? item.product.images[0];
             return (
@@ -55,9 +55,9 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
                   className="h-12 w-12 object-cover rounded-lg flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{item.product.name}</p>
-                  <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                  <p className="text-sm font-semibold text-saffron-500">{formatINR(item.subtotal)}</p>
+                  <p className="text-sm font-medium text-brand-text truncate">{item.product.name}</p>
+                  <p className="text-xs text-brand-textMuted">Qty: {item.quantity}</p>
+                  <p className="text-sm font-semibold text-gold-700">{formatINR(item.subtotal)}</p>
                 </div>
               </li>
             );
@@ -67,8 +67,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
 
       {/* Total */}
       {totals && (
-        <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
-          <div className="flex justify-between text-sm font-semibold text-gray-900">
+        <div className="px-4 py-2 bg-ivory-200 border-t border-ivory-400">
+          <div className="flex justify-between text-sm font-semibold text-brand-text">
             <span>Total</span>
             <span>{formatINR(totals.total)}</span>
           </div>
@@ -81,7 +81,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
           to="/cart"
           onClick={onClose}
           data-testid="mini-cart-view"
-          className="flex-1 text-center py-2 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="flex-1 text-center py-2 text-sm font-medium border border-ivory-500 text-brand-text rounded hover:bg-ivory-200 transition-colors"
         >
           View Cart
         </Link>
@@ -89,7 +89,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
           to="/checkout"
           onClick={onClose}
           data-testid="mini-cart-checkout"
-          className="flex-1 text-center py-2 text-sm font-medium bg-saffron-500 text-white rounded-lg hover:bg-saffron-600 transition-colors"
+          className="flex-1 text-center py-2 text-sm font-medium bg-gold-600 text-white rounded hover:bg-gold-700 transition-colors"
         >
           Checkout
         </Link>

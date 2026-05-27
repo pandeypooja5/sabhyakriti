@@ -1,58 +1,120 @@
 import { Link } from 'react-router-dom';
-import { Layers, Calendar, MapPin, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const shortcuts = [
   {
-    icon: Layers,
-    title: 'Browse by Fabric',
-    description: 'Silk, Cotton, Georgette, Banarasi & more',
+    ornament: '✦',
+    title: 'By Craft',
+    description: 'Banarasi Silk, Kanjivaram, Jamdani & traditional weaves',
     href: '/sarees?filterBy=fabric',
-    color: 'from-amber-500 to-orange-500',
-    testId: 'shortcut-fabric',
+    testId: 'shortcut-craft',
   },
   {
-    icon: Calendar,
-    title: 'Browse by Occasion',
-    description: 'Wedding, Festival, Party, Casual & office wear',
+    ornament: '◈',
+    title: 'By Occasion',
+    description: 'Wedding, Festive, Party, Casual & professional sarees',
     href: '/sarees?filterBy=occasion',
-    color: 'from-teal-600 to-teal-800',
     testId: 'shortcut-occasion',
   },
   {
-    icon: MapPin,
-    title: 'Browse by Region',
-    description: 'Bengal, Rajasthan, Tamil Nadu, Gujarat & more',
+    ornament: '❧',
+    title: 'By Heritage Region',
+    description: 'Bengal, Varanasi, Kanchipuram, Rajasthan & more',
     href: '/sarees?filterBy=region',
-    color: 'from-purple-600 to-purple-800',
     testId: 'shortcut-region',
   },
 ];
 
 const CategoryShortcuts: React.FC = () => {
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-testid="category-shortcuts">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Explore Our Collection</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {shortcuts.map(({ icon: Icon, title, description, href, color, testId }) => (
+    <div className="w-full max-w-lg" data-testid="category-shortcuts">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <p className="font-cormorant text-sm text-gold-600 italic tracking-widest uppercase mb-2">
+          Explore by
+        </p>
+        <h2 className="font-playfair text-3xl sm:text-4xl font-normal text-brand-text mb-3">
+          The World of SabhyaKriti
+        </h2>
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-px bg-gold-600 w-6" />
+          <span className="text-gold-600 text-sm">✦</span>
+          <div className="h-px bg-gold-600 w-6" />
+        </div>
+      </div>
+
+      {/* Cards grid */}
+      <div className="space-y-4">
+        {shortcuts.map(({ ornament, title, description, href, testId }) => (
           <Link
             key={title}
             to={href}
             data-testid={testId}
-            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${color} text-white p-6 hover:scale-[1.02] transition-transform duration-200 shadow-md hover:shadow-lg`}
+            className="group relative border-2 border-ivory-400 hover:border-gold-500 bg-white rounded p-6 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(201,160,66,0.12)]"
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center">
-                <Icon className="h-6 w-6" />
-              </div>
-              <ArrowRight className="h-5 w-5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+            {/* Ornate gold filigree corners */}
+            {/* Top-left corner */}
+            <div className="absolute top-2 left-2 w-4 h-4">
+              <svg viewBox="0 0 24 24" className="w-full h-full text-gold-500 opacity-60">
+                <path
+                  fill="currentColor"
+                  d="M3 3h4v2H5v2H3V3m16 0h4v4h-2V5h-2V3m-4 20h4v2h-4v-2m8-2v2h2v-4h-2v2m-16-2h2v4h-2v-2h-2v-2h2z"
+                />
+              </svg>
             </div>
-            <h3 className="text-lg font-bold mb-1">{title}</h3>
-            <p className="text-sm opacity-80">{description}</p>
-            <div className="absolute -bottom-4 -right-4 h-20 w-20 rounded-full bg-white/10" />
+
+            {/* Top-right corner */}
+            <div className="absolute top-2 right-2 w-4 h-4">
+              <svg viewBox="0 0 24 24" className="w-full h-full text-gold-500 opacity-60 scale-x-[-1]">
+                <path
+                  fill="currentColor"
+                  d="M3 3h4v2H5v2H3V3m16 0h4v4h-2V5h-2V3m-4 20h4v2h-4v-2m8-2v2h2v-4h-2v2m-16-2h2v4h-2v-2h-2v-2h2z"
+                />
+              </svg>
+            </div>
+
+            {/* Bottom-left corner */}
+            <div className="absolute bottom-2 left-2 w-4 h-4">
+              <svg viewBox="0 0 24 24" className="w-full h-full text-gold-500 opacity-60 scale-y-[-1]">
+                <path
+                  fill="currentColor"
+                  d="M3 3h4v2H5v2H3V3m16 0h4v4h-2V5h-2V3m-4 20h4v2h-4v-2m8-2v2h2v-4h-2v2m-16-2h2v4h-2v-2h-2v-2h2z"
+                />
+              </svg>
+            </div>
+
+            {/* Bottom-right corner */}
+            <div className="absolute bottom-2 right-2 w-4 h-4">
+              <svg viewBox="0 0 24 24" className="w-full h-full text-gold-500 opacity-60 scale-[-1]">
+                <path
+                  fill="currentColor"
+                  d="M3 3h4v2H5v2H3V3m16 0h4v4h-2V5h-2V3m-4 20h4v2h-4v-2m8-2v2h2v-4h-2v2m-16-2h2v4h-2v-2h-2v-2h2z"
+                />
+              </svg>
+            </div>
+
+            {/* Ornament icon */}
+            <div className="h-8 w-8 flex items-center justify-center bg-gold-100 rounded mb-3">
+              <span className="text-sm text-gold-600">{ornament}</span>
+            </div>
+
+            {/* Content */}
+            <h3 className="font-playfair text-xl font-normal text-brand-text mb-1">
+              {title}
+            </h3>
+            <p className="text-xs text-brand-textMuted leading-relaxed mb-3">
+              {description}
+            </p>
+
+            {/* CTA arrow */}
+            <div className="flex items-center gap-1 text-gold-600 group-hover:gap-2 transition-all duration-300">
+              <span className="text-xs font-medium">Explore</span>
+              <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+            </div>
           </Link>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

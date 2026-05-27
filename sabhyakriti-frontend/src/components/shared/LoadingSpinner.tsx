@@ -21,17 +21,17 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div
       data-testid="loading-spinner"
       className={cn(
-        'rounded-full border-t-saffron-500 border-gray-200 animate-spin',
+        'rounded-full border-t-gold-600 border-ivory-200 animate-spin',
         sizes[size],
         className
       )}
-      style={{ borderTopColor: '#FF6B2B' }}
+      style={{ borderTopColor: '#C9A042' }}
     />
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-ivory-100 bg-opacity-80 z-50">
         {spinner}
       </div>
     );

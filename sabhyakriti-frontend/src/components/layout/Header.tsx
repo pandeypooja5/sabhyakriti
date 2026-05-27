@@ -16,8 +16,10 @@ const Header: React.FC = () => {
   const miniCartOpen = useAppSelector((s) => s.ui.miniCartOpen);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   // Close user menu on outside click
   useEffect(() => {
@@ -45,51 +47,49 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white shadow-sm border-b border-gray-100">
+    <header className="sticky top-0 z-40 bg-ivory-100/95 backdrop-blur-sm border-b border-ivory-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 flex-shrink-0" data-testid="header-logo">
-            <div className="h-8 w-8 rounded-full bg-saffron-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
-            </div>
-            <span className="text-lg font-bold text-gray-900 hidden sm:block">
-              Sabh<span className="text-saffron-500">yakriti</span>
-            </span>
+          {/* Logo + Brand Name */}
+          <Link to="/" className="flex items-center gap-3 flex-shrink-0" data-testid="header-logo">
+            <img src="/logo.png" alt="SabhyaKriti" className="h-16 w-auto hidden sm:block" />
+            <img src="/logo.png" alt="SabhyaKriti" className="h-14 w-auto sm:hidden" />
+            <span className="hidden sm:inline font-playfair font-bold text-xl" style={{ color: '#8B1A1A' }}>SabhyaKriti</span>
           </Link>
 
-          {/* Search Bar */}
-          <form
-            onSubmit={handleSearch}
-            className="flex-1 max-w-lg hidden md:flex items-center"
-          >
-            <div className="relative w-full">
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search sarees, fabrics, occasions..."
-                data-testid="header-search-input"
-                className="w-full pl-4 pr-10 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:border-transparent"
-              />
-              <button
-                type="submit"
-                data-testid="header-search-btn"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-saffron-500"
-                aria-label="Search"
-              >
-                <Search className="h-4 w-4" />
-              </button>
-            </div>
-          </form>
+          {/* Expandable Search */}
+          <div ref={searchRef} className="flex-1 max-w-lg">
+            {searchExpanded ? (
+              <form onSubmit={handleSearch} className="w-full">
+                <div className="relative w-full">
+                  <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search sarees, fabrics, occasions..."
+                    data-testid="header-search-input"
+                    className="w-full pl-4 pr-10 py-2 text-sm border border-ivory-500 rounded-full bg-ivory-50 placeholder-brand-textMuted focus:outline-none focus:ring-2 focus:ring-gold-600/40 focus:border-gold-500"
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    data-testid="header-search-btn"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-textMuted hover:text-gold-600"
+                    aria-label="Search"
+                  >
+                    <Search className="h-4 w-4" />
+                  </button>
+                </div>
+              </form>
+            ) : null}
+          </div>
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            {/* Mobile Search */}
+            {/* Search Icon */}
             <button
-              className="md:hidden p-2 text-gray-600 hover:text-saffron-500"
-              data-testid="mobile-search-btn"
-              onClick={() => navigate('/sarees')}
+              className="p-2 text-brand-textMuted hover:text-gold-700 transition-colors"
+              onClick={() => setSearchExpanded(!searchExpanded)}
               aria-label="Search"
             >
               <Search className="h-5 w-5" />
@@ -98,13 +98,13 @@ const Header: React.FC = () => {
             {/* Wishlist */}
             <Link
               to="/account/wishlist"
-              className="relative p-2 text-gray-600 hover:text-saffron-500 transition-colors"
+              className="relative p-2 text-brand-textMuted hover:text-gold-700 transition-colors"
               data-testid="wishlist-icon"
               aria-label="Wishlist"
             >
               <Heart className="h-5 w-5" />
               {wishlistCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 h-4 w-4 flex items-center justify-center bg-saffron-500 text-white text-xs rounded-full font-bold">
+                <span className="absolute -top-0.5 -right-0.5 h-4 w-4 flex items-center justify-center bg-burgundy-500 text-white text-xs rounded-full font-bold">
                   {wishlistCount > 9 ? '9+' : wishlistCount}
                 </span>
               )}
@@ -114,13 +114,13 @@ const Header: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => dispatch(toggleMiniCart())}
-                className="relative p-2 text-gray-600 hover:text-saffron-500 transition-colors"
+                className="relative p-2 text-brand-textMuted hover:text-gold-700 transition-colors"
                 data-testid="cart-icon"
                 aria-label="Shopping cart"
               >
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 flex items-center justify-center bg-saffron-500 text-white text-xs rounded-full font-bold">
+                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 flex items-center justify-center bg-burgundy-500 text-white text-xs rounded-full font-bold">
                     {itemCount > 9 ? '9+' : itemCount}
                   </span>
                 )}
@@ -132,7 +132,7 @@ const Header: React.FC = () => {
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-1.5 p-2 text-gray-600 hover:text-saffron-500 transition-colors"
+                className="flex items-center gap-1.5 p-2 text-brand-textMuted hover:text-gold-700 transition-colors"
                 data-testid="user-menu-btn"
                 aria-label="User menu"
               >
@@ -147,18 +147,18 @@ const Header: React.FC = () => {
               </button>
 
               {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 animate-fade-in">
+                <div className="absolute right-0 mt-2 w-48 bg-ivory-100 rounded shadow-lg border border-ivory-400 py-2 z-50 animate-fade-in">
                   {isAuthenticated ? (
                     <>
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-sm font-semibold text-gray-900 truncate">{user?.name}</p>
-                        <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                      <div className="px-4 py-2 border-b border-ivory-400">
+                        <p className="text-sm font-semibold text-brand-text truncate">{user?.name}</p>
+                        <p className="text-xs text-brand-textMuted truncate">{user?.email}</p>
                       </div>
                       <Link
                         to="/account"
                         onClick={() => setUserMenuOpen(false)}
                         data-testid="user-menu-account"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-brand-text hover:bg-ivory-200"
                       >
                         <User className="h-4 w-4" /> My Account
                       </Link>
@@ -166,7 +166,7 @@ const Header: React.FC = () => {
                         to="/orders"
                         onClick={() => setUserMenuOpen(false)}
                         data-testid="user-menu-orders"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-brand-text hover:bg-ivory-200"
                       >
                         <Package className="h-4 w-4" /> Orders
                       </Link>
@@ -175,12 +175,12 @@ const Header: React.FC = () => {
                           to="/admin"
                           onClick={() => setUserMenuOpen(false)}
                           data-testid="user-menu-admin"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-teal-700 hover:bg-teal-50"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gold-700 hover:bg-gold-50"
                         >
                           <Settings className="h-4 w-4" /> Admin Panel
                         </Link>
                       )}
-                      <div className="border-t border-gray-100 mt-1 pt-1">
+                      <div className="border-t border-ivory-400 mt-1 pt-1">
                         <button
                           onClick={handleLogout}
                           data-testid="user-menu-logout"
@@ -226,6 +226,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
+      <div className="h-px bg-gradient-to-r from-transparent via-gold-600/40 to-transparent" />
     </header>
   );
 };

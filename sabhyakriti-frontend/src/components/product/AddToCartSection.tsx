@@ -61,19 +61,19 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({ product }) => {
     <div className="space-y-4" data-testid="add-to-cart-section">
       {/* Quantity stepper */}
       <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-700 font-medium">Quantity:</span>
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+        <span className="text-sm text-brand-text font-medium">Quantity:</span>
+        <div className="flex items-center border border-ivory-500 rounded overflow-hidden">
           <button
             onClick={() => setQty((q) => Math.max(1, q - 1))}
             disabled={qty <= 1}
             data-testid="qty-decrease"
-            className="h-9 w-9 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 transition-colors"
+            className="h-9 w-9 flex items-center justify-center hover:bg-ivory-200 disabled:opacity-40 transition-colors"
             aria-label="Decrease quantity"
           >
             <Minus className="h-4 w-4" />
           </button>
           <span
-            className="h-9 w-10 flex items-center justify-center text-sm font-semibold border-x border-gray-300"
+            className="h-9 w-10 flex items-center justify-center text-sm font-semibold border-x border-ivory-500"
             data-testid="qty-display"
           >
             {qty}
@@ -82,14 +82,14 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({ product }) => {
             onClick={() => setQty((q) => Math.min(10, q + 1))}
             disabled={qty >= 10 || qty >= product.stockQuantity}
             data-testid="qty-increase"
-            className="h-9 w-9 flex items-center justify-center hover:bg-gray-50 disabled:opacity-40 transition-colors"
+            className="h-9 w-9 flex items-center justify-center hover:bg-ivory-200 disabled:opacity-40 transition-colors"
             aria-label="Increase quantity"
           >
             <Plus className="h-4 w-4" />
           </button>
         </div>
         {product.stockQuantity <= 5 && product.stockStatus !== 'OUT_OF_STOCK' && (
-          <span className="text-xs text-amber-600 font-medium">Only {product.stockQuantity} left!</span>
+          <span className="text-xs text-gold-700 font-medium">Only {product.stockQuantity} left!</span>
         )}
       </div>
 
@@ -100,9 +100,9 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({ product }) => {
           disabled={outOfStock || addingToCart}
           data-testid="add-to-cart-btn"
           className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all',
+            'flex-1 flex items-center justify-center gap-2 py-3 rounded font-semibold text-sm transition-all',
             outOfStock || addingToCart
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              ? 'bg-ivory-200 text-brand-textMuted cursor-not-allowed'
               : 'bg-saffron-500 hover:bg-saffron-600 text-white shadow-md hover:shadow-lg'
           )}
         >
@@ -115,10 +115,10 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({ product }) => {
           disabled={outOfStock}
           data-testid="buy-now-btn"
           className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all border-2',
+            'flex-1 flex items-center justify-center gap-2 py-3 rounded font-semibold text-sm transition-all border-2',
             outOfStock
-              ? 'border-gray-200 text-gray-400 cursor-not-allowed'
-              : 'border-teal-700 text-teal-700 hover:bg-teal-50'
+              ? 'border-ivory-400 text-brand-textMuted cursor-not-allowed'
+              : 'border-gold-600 text-gold-600 hover:bg-gold-50'
           )}
         >
           <Zap className="h-4 w-4" />
@@ -132,20 +132,20 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({ product }) => {
           onClick={handleWishlist}
           data-testid="wishlist-toggle-btn"
           className={cn(
-            'flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium border transition-colors',
+            'flex-1 flex items-center justify-center gap-2 py-2.5 rounded text-sm font-medium border transition-colors',
             wishlisted
-              ? 'border-saffron-300 bg-saffron-50 text-saffron-600'
-              : 'border-gray-200 text-gray-600 hover:border-gray-300'
+              ? 'border-burgundy-300 bg-burgundy-50 text-burgundy-600'
+              : 'border-ivory-400 text-brand-textMuted hover:border-ivory-500'
           )}
         >
-          <Heart className={cn('h-4 w-4', wishlisted && 'fill-current text-saffron-500')} />
+          <Heart className={cn('h-4 w-4', wishlisted && 'fill-current text-burgundy-500')} />
           {wishlisted ? 'Wishlisted' : 'Wishlist'}
         </button>
 
         <button
           onClick={() => dispatch(openSizeGuide())}
           data-testid="size-guide-btn"
-          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium border border-gray-200 text-gray-600 hover:border-gray-300 transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded text-sm font-medium border border-ivory-400 text-brand-textMuted hover:border-ivory-500 transition-colors"
         >
           <Ruler className="h-4 w-4" />
           Size Guide

@@ -45,9 +45,9 @@ const StarRating: React.FC<StarRatingProps> = ({
             <Star
               className={cn(
                 sizes[size],
-                filled ? 'fill-amber-400 text-amber-400' : '',
-                partial ? 'fill-amber-200 text-amber-400' : '',
-                !filled && !partial ? 'fill-gray-200 text-gray-200' : ''
+                filled ? 'fill-gold-600 text-gold-600' : '',
+                partial ? 'fill-gold-200 text-gold-600' : '',
+                !filled && !partial ? 'fill-ivory-300 text-ivory-300' : ''
               )}
             />
           </button>

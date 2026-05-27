@@ -24,18 +24,20 @@ const FeaturedProducts: React.FC = () => {
   };
 
   return (
-    <section className="py-12 bg-white" data-testid="featured-products">
+    <section className="py-16 bg-ivory-200" data-testid="featured-products">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Featured Sarees</h2>
-            <p className="text-sm text-gray-500 mt-1">Top-rated picks from our collection</p>
+            <p className="font-cormorant text-sm text-gold-600 italic tracking-widest uppercase mb-2">
+              Curated for You
+            </p>
+            <h2 className="font-playfair text-4xl sm:text-5xl font-normal text-brand-text">Featured Sarees</h2>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => scroll('left')}
               data-testid="featured-scroll-left"
-              className="h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="h-8 w-8 rounded-full border border-ivory-500 flex items-center justify-center hover:bg-ivory-300 transition-colors text-brand-textMuted hover:text-brand-text"
               aria-label="Scroll left"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -43,7 +45,7 @@ const FeaturedProducts: React.FC = () => {
             <button
               onClick={() => scroll('right')}
               data-testid="featured-scroll-right"
-              className="h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+              className="h-8 w-8 rounded-full border border-ivory-500 flex items-center justify-center hover:bg-ivory-300 transition-colors text-brand-textMuted hover:text-brand-text"
               aria-label="Scroll right"
             >
               <ChevronRight className="h-4 w-4" />
@@ -71,7 +73,7 @@ const FeaturedProducts: React.FC = () => {
           <Link
             to="/sarees?sort=rating"
             data-testid="featured-view-all"
-            className="inline-flex items-center gap-2 text-sm font-medium text-saffron-500 hover:text-saffron-600"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gold-700 hover:text-gold-800"
           >
             View All Featured <ChevronRight className="h-4 w-4" />
           </Link>

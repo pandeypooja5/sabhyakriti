@@ -4,18 +4,18 @@
 
 @layer base {
   :root {
-    --background: 250 250 250;
-    --foreground: 26 26 26;
-    --primary: 255 107 43;
+    --background: 27 100 96;
+    --foreground: 25 48 13;
+    --primary: 40 65 55;
     --primary-foreground: 255 255 255;
-    --secondary: 27 75 90;
+    --secondary: 0 65 35;
     --secondary-foreground: 255 255 255;
-    --muted: 245 245 245;
-    --muted-foreground: 115 115 115;
-    --border: 229 229 229;
-    --input: 229 229 229;
-    --ring: 255 107 43;
-    --radius: 0.5rem;
+    --muted: 29 52 90;
+    --muted-foreground: 25 22 45;
+    --border: 34 51 80;
+    --input: 34 51 80;
+    --ring: 40 65 55;
+    --radius: 0.25rem;
   }
 
   * {
@@ -24,14 +24,15 @@
 
   body {
     font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    background-color: #FAFAFA;
-    color: #1A1A1A;
+    background-color: #FAF4EA;
+    color: #2A1A0A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-family: 'Playfair Display', Georgia, ui-serif, serif;
+    font-weight: 400;
     line-height: 1.25;
   }
 
@@ -43,23 +44,48 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-saffron-500 hover:bg-saffron-600 text-white font-medium px-6 py-2.5 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:ring-offset-2;
+    @apply bg-saffron-500 hover:bg-saffron-600 text-white font-medium px-6 py-2.5 rounded tracking-wide transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply bg-teal-700 hover:bg-teal-800 text-white font-medium px-6 py-2.5 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-700 focus:ring-offset-2;
+    @apply bg-gold-600 hover:bg-gold-700 text-white font-medium px-6 py-2.5 rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-600 focus:ring-offset-2;
+  }
+
+  .btn-heritage {
+    @apply border border-gold-600 text-gold-700 hover:bg-gold-50 font-medium px-6 py-2.5 rounded transition-colors duration-200 tracking-wide;
   }
 
   .btn-outline {
-    @apply border border-saffron-500 text-saffron-500 hover:bg-saffron-50 font-medium px-6 py-2.5 rounded-lg transition-colors duration-200;
+    @apply border border-ivory-500 text-brand-text hover:bg-ivory-200 font-medium px-6 py-2.5 rounded transition-colors duration-200;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
+    @apply bg-ivory-100 rounded border border-ivory-400 overflow-hidden;
+    box-shadow: 0 1px 4px rgba(42,26,10,0.06);
   }
 
   .input-field {
-    @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-saffron-500 focus:border-transparent transition-all;
+    @apply w-full border border-ivory-500 rounded px-3 py-2 text-sm bg-ivory-50 placeholder-brand-textMuted focus:outline-none focus:ring-2 focus:ring-gold-600/40 focus:border-gold-500 transition-all;
+  }
+
+  .section-heading {
+    @apply font-playfair text-3xl sm:text-4xl font-normal text-brand-text leading-tight tracking-wide;
+  }
+
+  .section-subheading {
+    @apply font-cormorant text-lg text-brand-textMuted italic leading-relaxed;
+  }
+
+  .divider-gold {
+    @apply border-t border-gold-600/30 w-16 mx-auto my-4;
+  }
+
+  .tag-heritage {
+    @apply text-xs bg-ivory-300 text-brand-text px-3 py-1 rounded-full font-medium tracking-wide;
+  }
+
+  .ornament-divider {
+    @apply flex items-center gap-3 text-gold-600;
   }
 }
 
@@ -79,14 +105,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #FAF3E4;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c4c4c4;
+  background: #D4BC88;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a3a3a3;
+  background: #B8932A;
 }

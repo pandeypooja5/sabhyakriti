@@ -20,7 +20,7 @@ const AppLayout: React.FC = () => {
   }, [dispatch, isAuthenticated]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAFAFA]">
+    <div className="flex flex-col min-h-screen bg-ivory-100">
       <Header />
       <CategoryNav />
       <main className="flex-1">

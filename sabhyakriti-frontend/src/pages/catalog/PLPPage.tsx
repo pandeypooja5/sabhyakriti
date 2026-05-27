@@ -51,26 +51,29 @@ const PLPPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" data-testid="plp-page">
-      <Breadcrumb items={[{ label: 'Sarees' }]} />
+        <Breadcrumb items={[{ label: 'Sarees' }]} />
 
-      <div className="flex items-center justify-between mt-4 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">All Sarees</h1>
-        <button
-          onClick={() => setFiltersOpen(true)}
-          className="lg:hidden flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium"
-          data-testid="mobile-filters-btn"
-        >
-          <SlidersHorizontal className="h-4 w-4" /> Filters
-        </button>
-      </div>
+        <div className="flex items-center gap-4 mt-4 mb-6">
+          {/* Filters Menu Icon */}
+          <button
+            onClick={() => setFiltersOpen(true)}
+            className="flex items-center p-2 text-brand-text hover:bg-ivory-200 rounded transition-colors"
+            data-testid="mobile-filters-btn"
+            aria-label="Open filters"
+          >
+            <SlidersHorizontal className="h-5 w-5" />
+          </button>
 
-      {/* Top bar: search + sort */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="flex-1">
-          <PLPSearch />
+          <h1 className="text-2xl font-playfair font-normal text-brand-text flex-1">All Sarees</h1>
         </div>
-        <PLPSort />
-      </div>
+
+        {/* Top bar: search + sort */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="flex-1">
+            <PLPSearch />
+          </div>
+          <PLPSort />
+        </div>
 
       <div className="flex gap-6">
         {/* Desktop filters sidebar */}
@@ -82,10 +85,10 @@ const PLPPage: React.FC = () => {
         {filtersOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div className="absolute inset-0 bg-black/50" onClick={() => setFiltersOpen(false)} />
-            <div className="absolute right-0 inset-y-0 w-72 bg-white shadow-xl overflow-y-auto p-4">
+            <div className="absolute right-0 inset-y-0 w-72 bg-ivory-100 shadow-xl overflow-y-auto p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold">Filters</h2>
-                <button onClick={() => setFiltersOpen(false)}>
+                <h2 className="font-semibold text-brand-text">Filters</h2>
+                <button onClick={() => setFiltersOpen(false)} className="text-brand-textMuted hover:text-brand-text">
                   <X className="h-5 w-5" />
                 </button>
               </div>

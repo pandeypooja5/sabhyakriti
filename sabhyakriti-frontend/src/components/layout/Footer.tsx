@@ -14,15 +14,13 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-teal-700 text-white mt-auto" data-testid="footer">
+    <footer className="bg-[#1C110A] text-ivory-400 mt-auto" data-testid="footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <h2 className="text-xl font-bold mb-4">
-              Sabh<span className="text-saffron-400">yakriti</span>
-            </h2>
-            <p className="text-sm text-teal-100 mb-4 leading-relaxed">
+            <img src="/logo.png" alt="SabhyaKriti" className="h-16 w-auto brightness-90 mb-4" />
+            <p className="text-sm text-ivory-400 mb-4 leading-relaxed">
               Celebrating India's rich textile heritage. Every saree tells a story of craftsmanship and tradition.
             </p>
             <div className="flex gap-3">
@@ -37,7 +35,7 @@ const Footer: React.FC = () => {
                   href={href}
                   aria-label={label}
                   data-testid={`footer-social-${label.toLowerCase()}`}
-                  className="h-8 w-8 flex items-center justify-center rounded-full bg-teal-600 hover:bg-saffron-500 transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-full bg-ivory-200 text-[#1C110A] hover:border hover:border-gold-600 transition-colors"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -47,8 +45,8 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4 text-sm uppercase tracking-wide text-teal-200">Shop</h3>
-            <ul className="space-y-2 text-sm text-teal-100">
+            <h3 className="font-semibold mb-4 text-xs uppercase tracking-widest text-gold-500">Shop</h3>
+            <ul className="space-y-2 text-sm text-ivory-400">
               {[
                 { label: 'All Sarees', href: '/sarees' },
                 { label: 'New Arrivals', href: '/sarees?sort=newest' },
@@ -57,7 +55,7 @@ const Footer: React.FC = () => {
                 { label: 'Silk Sarees', href: '/sarees?fabric=silk' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="hover:text-saffron-300 transition-colors">
+                  <Link to={link.href} className="hover:text-ivory-100 font-light transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -67,8 +65,8 @@ const Footer: React.FC = () => {
 
           {/* Help */}
           <div>
-            <h3 className="font-semibold mb-4 text-sm uppercase tracking-wide text-teal-200">Help</h3>
-            <ul className="space-y-2 text-sm text-teal-100">
+            <h3 className="font-semibold mb-4 text-xs uppercase tracking-widest text-gold-500">Help</h3>
+            <ul className="space-y-2 text-sm text-ivory-400">
               {[
                 { label: 'My Orders', href: '/orders' },
                 { label: 'Track Order', href: '/orders' },
@@ -78,7 +76,7 @@ const Footer: React.FC = () => {
                 { label: 'FAQ', href: '/faq' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="hover:text-saffron-300 transition-colors">
+                  <Link to={link.href} className="hover:text-ivory-100 font-light transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -88,9 +86,9 @@ const Footer: React.FC = () => {
 
           {/* Newsletter & Contact */}
           <div>
-            <h3 className="font-semibold mb-4 text-sm uppercase tracking-wide text-teal-200">Stay Connected</h3>
+            <h3 className="font-semibold mb-4 text-xs uppercase tracking-widest text-gold-500">Stay Connected</h3>
             <form onSubmit={handleNewsletter} className="mb-4">
-              <p className="text-sm text-teal-100 mb-2">Get exclusive offers in your inbox.</p>
+              <p className="text-sm text-ivory-400 mb-2">Get exclusive offers in your inbox.</p>
               <div className="flex gap-2">
                 <input
                   type="email"
@@ -98,35 +96,35 @@ const Footer: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email"
                   data-testid="newsletter-input"
-                  className="flex-1 px-3 py-1.5 text-sm bg-teal-600 rounded-lg border border-teal-500 text-white placeholder-teal-300 focus:outline-none focus:border-saffron-400"
+                  className="flex-1 px-3 py-1.5 text-sm bg-ivory-200 rounded border border-ivory-400 text-brand-text placeholder-brand-textMuted focus:outline-none focus:border-gold-500"
                 />
                 <button
                   type="submit"
                   data-testid="newsletter-submit"
-                  className="px-3 py-1.5 bg-saffron-500 text-white rounded-lg text-sm hover:bg-saffron-600 transition-colors font-medium"
+                  className="px-3 py-1.5 bg-gold-600 hover:bg-gold-700 text-white rounded text-sm transition-colors font-medium"
                 >
                   Go
                 </button>
               </div>
             </form>
-            <ul className="space-y-2 text-sm text-teal-100">
+            <ul className="space-y-2 text-sm text-ivory-400">
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-teal-300 flex-shrink-0" />
+                <Mail className="h-4 w-4 text-gold-600 flex-shrink-0" />
                 <span>support@sabhyakriti.com</span>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-teal-300 flex-shrink-0" />
-                <span>+91 98765 43210</span>
+                <Phone className="h-4 w-4 text-gold-600 flex-shrink-0" />
+                <span>9160660011</span>
               </li>
               <li className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 text-teal-300 flex-shrink-0 mt-0.5" />
-                <span>Mumbai, Maharashtra, India</span>
+                <MapPin className="h-4 w-4 text-gold-600 flex-shrink-0 mt-0.5" />
+                <span>Hyderabad, Telangana, India</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-teal-600 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-teal-200">
+        <div className="border-t border-ivory-700 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gold-500">
           <p>&copy; {new Date().getFullYear()} Sabhyakriti. All rights reserved.</p>
           <div className="flex gap-4">
             <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

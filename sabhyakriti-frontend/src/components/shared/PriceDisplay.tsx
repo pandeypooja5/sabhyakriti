@@ -20,16 +20,16 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({ price, mrp, size = 'md', cl
 
   return (
     <div className={cn('flex items-baseline gap-2 flex-wrap', className)} data-testid="price-display">
-      <span className={cn('font-bold text-gray-900', fs.price)} data-testid="price">
+      <span className={cn('font-bold text-brand-text', fs.price)} data-testid="price">
         {formatINR(price)}
       </span>
       {discount > 0 && (
         <>
-          <span className={cn('line-through text-gray-400', fs.mrp)} data-testid="mrp">
+          <span className={cn('line-through text-brand-textMuted', fs.mrp)} data-testid="mrp">
             {formatINR(mrp)}
           </span>
           <span
-            className={cn('bg-green-100 text-green-700 rounded font-semibold', fs.badge)}
+            className={cn('bg-ivory-300 text-brand-text rounded font-semibold', fs.badge)}
             data-testid="discount-badge"
           >
             {discount}% off

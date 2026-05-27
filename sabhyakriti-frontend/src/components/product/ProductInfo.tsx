@@ -30,16 +30,16 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     <div data-testid="product-info">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 leading-tight" data-testid="product-name">
+          <h1 className="text-2xl font-playfair font-normal text-brand-text leading-tight" data-testid="product-name">
             {product.name}
           </h1>
-          <p className="text-xs text-gray-400 mt-1">SKU: {product.sku}</p>
+          <p className="text-xs text-brand-textMuted mt-1">SKU: {product.sku}</p>
         </div>
         <div className="flex gap-2 flex-shrink-0">
           <button
             onClick={handleWhatsApp}
             data-testid="share-whatsapp"
-            className="h-8 w-8 flex items-center justify-center rounded-full border border-gray-200 text-green-600 hover:bg-green-50 transition-colors"
+            className="h-8 w-8 flex items-center justify-center rounded-full border border-ivory-400 text-green-600 hover:bg-ivory-200 transition-colors"
             aria-label="Share on WhatsApp"
           >
             <MessageCircle className="h-4 w-4" />
@@ -47,7 +47,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           <button
             onClick={handleShare}
             data-testid="share-btn"
-            className="h-8 w-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors"
+            className="h-8 w-8 flex items-center justify-center rounded-full border border-ivory-400 text-brand-textMuted hover:bg-ivory-200 transition-colors"
             aria-label="Share"
           >
             {navigator.clipboard ? <Copy className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
@@ -59,7 +59,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       {product.reviewCount > 0 && (
         <div className="flex items-center gap-2 mb-3">
           <StarRating rating={product.avgRating} />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-brand-textMuted">
             {product.avgRating.toFixed(1)} ({product.reviewCount} reviews)
           </span>
         </div>
@@ -72,14 +72,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       <StockBadge status={product.stockStatus} />
 
       {/* Description */}
-      <p className="text-sm text-gray-600 mt-4 leading-relaxed" data-testid="product-description">
+      <p className="text-sm text-brand-text mt-4 leading-relaxed" data-testid="product-description">
         {product.description}
       </p>
 
       {/* Categories */}
       <div className="flex flex-wrap gap-1.5 mt-4">
         {[...product.fabricCategories, ...product.occasionCategories, ...product.regionCategories].map((cat) => (
-          <span key={cat.id} className="text-xs bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">
+          <span key={cat.id} className="tag-heritage">
             {cat.name}
           </span>
         ))}

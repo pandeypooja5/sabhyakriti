@@ -22,10 +22,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, items, selected, o
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="border-b border-gray-100 py-3">
+    <div className="border-b border-ivory-300 py-3">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 py-1"
+        className="flex items-center justify-between w-full text-sm font-semibold text-brand-text py-1"
         data-testid={`filter-section-${title.toLowerCase()}`}
       >
         {title}
@@ -41,13 +41,13 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, items, selected, o
                   checked={selected.includes(item.id)}
                   onChange={() => onToggle(item.id)}
                   data-testid={`filter-${item.slug}`}
-                  className="h-4 w-4 rounded border-gray-300 text-saffron-500 focus:ring-saffron-500 cursor-pointer"
+                  className="h-4 w-4 rounded border-gold-600 text-gold-600 focus:ring-gold-600 cursor-pointer"
                 />
-                <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                <span className="text-sm text-brand-text group-hover:text-brand-text">
                   {item.name}
                 </span>
                 {item.productCount !== undefined && (
-                  <span className="text-xs text-gray-400 ml-auto">({item.productCount})</span>
+                  <span className="text-xs text-brand-textMuted ml-auto">({item.productCount})</span>
                 )}
               </label>
             </li>
@@ -79,12 +79,12 @@ const PLPFilters: React.FC<PLPFiltersProps> = ({ onClose }) => {
 
   return (
     <aside
-      className="w-full bg-white rounded-xl border border-gray-100 p-4"
+      className="w-full bg-ivory-100 rounded border border-ivory-400 p-4"
       data-testid="plp-filters"
     >
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-gray-900">
-          Filters {totalActive > 0 && <span className="ml-1 text-xs bg-saffron-100 text-saffron-600 px-1.5 py-0.5 rounded-full">{totalActive}</span>}
+        <h2 className="text-base font-semibold text-brand-text">
+          Filters {totalActive > 0 && <span className="ml-1 text-xs bg-gold-100 text-gold-600 px-1.5 py-0.5 rounded-full">{totalActive}</span>}
         </h2>
         <div className="flex items-center gap-2">
           {totalActive > 0 && (
@@ -97,7 +97,7 @@ const PLPFilters: React.FC<PLPFiltersProps> = ({ onClose }) => {
             </button>
           )}
           {onClose && (
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button onClick={onClose} className="text-brand-textMuted hover:text-brand-text">
               <X className="h-4 w-4" />
             </button>
           )}
