@@ -1,6 +1,6 @@
 {
   "buildCommand": "echo 'Build skipped - using pre-built dist'",
-  "outputDirectory": "dist",
+  "outputDirectory": "sabhyakriti-frontend/dist",
   "rewrites": [
     {
       "source": "/api/v1/auth/:path*",
