@@ -429,6 +429,18 @@ class ProductApplicationService:
         )
 
     # ------------------------------------------------------------------
+    # Internal: Batch operations for other services
+    # ------------------------------------------------------------------
+
+    async def get_products_batch(self, product_ids: list[UUID]) -> list[Product]:
+        """Fetch multiple product entities by ID for internal service use (e.g., Cart Service).
+
+        Returns domain entities so callers have access to all fields
+        (including is_active and primary_image), not just summary DTO fields.
+        """
+        return await self._products.find_by_ids(product_ids)
+
+    # ------------------------------------------------------------------
     # Helpers
     # ------------------------------------------------------------------
 

@@ -46,16 +46,16 @@ const MiniCart: React.FC<MiniCartProps> = ({ onClose }) => {
       ) : (
         <ul className="divide-y divide-ivory-200 max-h-64 overflow-y-auto">
           {displayItems.map((item) => {
-            const img = item.product.images.find((i) => i.isPrimary) ?? item.product.images[0];
+            const img = item.product?.images?.find((i) => i.isPrimary) ?? item.product?.images?.[0];
             return (
               <li key={item.id} className="flex gap-3 px-4 py-3" data-testid="mini-cart-item">
                 <img
                   src={img?.url ?? '/placeholder.jpg'}
-                  alt={item.product.name}
+                  alt={item.product?.name ?? 'Product'}
                   className="h-12 w-12 object-cover rounded-lg flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-brand-text truncate">{item.product.name}</p>
+                  <p className="text-sm font-medium text-brand-text truncate">{item.product?.name ?? 'Unknown Product'}</p>
                   <p className="text-xs text-brand-textMuted">Qty: {item.quantity}</p>
                   <p className="text-sm font-semibold text-gold-700">{formatINR(item.subtotal)}</p>
                 </div>

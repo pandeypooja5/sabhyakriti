@@ -4,6 +4,7 @@ import type { Address, PaymentMethod } from '@/types';
 import { createOrder } from '@/services/orderService';
 import { createRazorpayOrder, verifyPayment } from '@/services/paymentService';
 import { listAddresses } from '@/services/orderService';
+import { clearCart as clearCartApi } from '@/services/cartService';
 import { loadRazorpay } from '@/utils/razorpay';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
@@ -19,7 +20,7 @@ const steps = ['Address', 'Payment', 'Review'];
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { couponCode, refetchCart } = useCart();
+  const { couponCode, refetchCart, items, totals } = useCart();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
@@ -43,14 +44,21 @@ const CheckoutPage: React.FC = () => {
   const handlePlaceOrder = async () => {
     if (!selectedAddressId) return;
 
+    if (!totals || items.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
+
     try {
       const order = await createOrder({
         addressId: selectedAddressId,
         paymentMethod,
         couponCode: couponCode ?? undefined,
+        cart: { id: '', items, totals, couponCode: couponCode ?? undefined },
       });
 
       if (paymentMethod === 'COD') {
+        await clearCartApi();
         await refetchCart();
         navigate(`/order-confirmation/${order.id}`);
         return;
@@ -81,6 +89,7 @@ const CheckoutPage: React.FC = () => {
         orderId: order.id,
       });
 
+      await clearCartApi();
       await refetchCart();
       navigate(`/order-confirmation/${order.id}`);
     } catch (err: unknown) {

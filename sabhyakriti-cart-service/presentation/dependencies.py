@@ -162,7 +162,8 @@ async def verify_internal_secret(
 def get_product_client() -> ProductServiceClient:
     """Return a ProductServiceClient configured from environment."""
     base_url = os.environ.get("PRODUCT_SERVICE_URL", "http://localhost:8001")
-    return ProductServiceClient(base_url=base_url)
+    internal_secret = os.environ.get("INTERNAL_SERVICE_SECRET", "")
+    return ProductServiceClient(base_url=base_url, internal_secret=internal_secret)
 
 
 async def get_cart_service(
