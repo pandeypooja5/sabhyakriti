@@ -54,10 +54,15 @@ const Header: React.FC = () => {
           <Link to="/" className="flex items-center gap-2 flex-shrink-0" data-testid="header-logo">
             <img src="/logo.png" alt="SabhyaKriti" className="h-24 w-auto hidden sm:block" />
             <img src="/logo.png" alt="SabhyaKriti" className="h-20 w-auto sm:hidden" />
-            <span className="hidden sm:inline font-playfair font-bold text-3xl tracking-wide">
-              <span style={{ color: '#C9A042' }}>Sabhya</span>
-              <span style={{ color: '#8B1A1A' }}>Kriti</span>
-            </span>
+            <div className="hidden sm:flex flex-col leading-tight">
+              <span className="font-playfair font-bold text-3xl tracking-wide">
+                <span style={{ color: '#C9A042' }}>Sabhya</span>
+                <span style={{ color: '#8B1A1A' }}>Kriti</span>
+              </span>
+              <span className="font-cormorant italic text-xs tracking-widest" style={{ color: '#8B6914' }}>
+                Saree that speaks Tradition
+              </span>
+            </div>
           </Link>
 
           {/* Expandable Search */}
