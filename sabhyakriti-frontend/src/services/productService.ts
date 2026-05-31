@@ -132,13 +132,46 @@ export const confirmImageUpload = async (productId: string, s3Key: string, isPri
   await apiClient.post(`/products/${productId}/images/confirm`, { s3_key: s3Key, is_primary: isPrimary, sort_order: sortOrder });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toProductPayload(data: Partial<Product> & Record<string, any>) {
+  return {
+    name: data.name,
+    sku: data.sku,
+    description: data.description ?? '',
+    price: data.mrp ?? data.price ?? 0,
+    discount_percentage: data.discountPercent ?? 0,
+    stock_qty: data.stockQuantity ?? 0,
+    is_active: data.isActive ?? true,
+    category_ids: [
+      ...(data.fabricCategoryIds ?? []),
+      ...(data.occasionCategoryIds ?? []),
+      ...(data.regionCategoryIds ?? []),
+    ],
+  };
+}
+
 export const createProduct = async (data: Partial<Product>): Promise<Product> => {
-  const res = await apiClient.post('/products', data);
+  const res = await apiClient.post('/products', toProductPayload(data));
   return normalizeProduct(res.data.product ?? res.data);
 };
 
 export const updateProduct = async (id: string, data: Partial<Product>): Promise<Product> => {
-  const res = await apiClient.patch(`/products/${id}`, data);
+  const payload: Record<string, unknown> = {};
+  if (data.name !== undefined) payload.name = data.name;
+  if (data.description !== undefined) payload.description = data.description;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const d = data as any;
+  if (d.mrp !== undefined) payload.price = d.mrp;
+  if (d.discountPercent !== undefined) payload.discount_percentage = d.discountPercent;
+  if (d.stockQuantity !== undefined) payload.stock_qty = d.stockQuantity;
+  if (data.isActive !== undefined) payload.is_active = data.isActive;
+  const catIds = [
+    ...(d.fabricCategoryIds ?? []),
+    ...(d.occasionCategoryIds ?? []),
+    ...(d.regionCategoryIds ?? []),
+  ];
+  if (catIds.length > 0) payload.category_ids = catIds;
+  const res = await apiClient.patch(`/products/${id}`, payload);
   return normalizeProduct(res.data.product ?? res.data);
 };
 

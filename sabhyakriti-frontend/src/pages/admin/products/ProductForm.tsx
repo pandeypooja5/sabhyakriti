@@ -72,9 +72,9 @@ const ProductForm: React.FC = () => {
         const draft = await createProduct({
           name: form.name, sku: form.sku,
           description: form.description || form.name,
-          mrp: Number(form.mrp) || 0, price: Number(form.price) || 0,
+          mrp: Number(form.mrp) || 1,
           stockQuantity: Number(form.stockQuantity) || 0,
-          isActive: false, isFeatured: false,
+          isActive: false,
         });
         setDraftProductId(draft.id);
         setSaving(false);
