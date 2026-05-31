@@ -38,6 +38,11 @@ class IProductRepository(ABC):
         ...
 
     @abstractmethod
+    async def find_by_ids(self, product_ids: list[UUID]) -> list[Product]:
+        """Fetch multiple active products by their IDs."""
+        ...
+
+    @abstractmethod
     async def get_slug_set(self) -> set[str]:
         """Return all existing slugs (used during slug uniqueness check)."""
         ...

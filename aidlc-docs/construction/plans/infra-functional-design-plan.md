@@ -5,10 +5,10 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answers — Q1:A (Layered stacks) Q2:A (Production only)
-- [x] Step 2: Analyze answers — NO ambiguities
-- [x] Step 3: Generate CDK infrastructure code
-- [x] Step 4: Present for approval
+- [ ] Step 1: Answer questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers
+- [ ] Step 3: Generate CDK infrastructure code
+- [ ] Step 4: Present for approval
 
 ---
 
@@ -36,7 +36,7 @@ A) Layered stacks — NetworkStack, DatabaseStack, ComputeStack, StorageStack, M
 B) Single stack — all resources in one CDK stack (simpler, but slower to update and harder to maintain)
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -47,4 +47,4 @@ A) Production only — one set of CDK stacks for prod; developers use docker-com
 B) Production + Staging — two environments, staging uses smaller/cheaper instance types (t3.micro)
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B

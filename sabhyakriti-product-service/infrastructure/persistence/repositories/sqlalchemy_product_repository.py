@@ -188,6 +188,37 @@ class SQLAlchemyProductRepository(IProductRepository):
         row = (await self._read.execute(stmt)).scalar_one_or_none()
         return _model_to_entity(row) if row else None
 
+    async def _get_by_id_write(self, product_id: UUID) -> Product | None:
+        """Re-fetch a product (with images) using the write session.
+
+        Used after stock mutations so the entity reflects the pending change
+        within the active write transaction.
+        """
+        from sqlalchemy.orm import selectinload
+        stmt = (
+            select(ProductModel)
+            .where(ProductModel.product_id == product_id)
+            .options(selectinload(ProductModel.images))
+        )
+        row = (await self._write.execute(stmt)).scalar_one_or_none()
+        return _model_to_entity(row) if row else None
+
+    async def find_by_ids(self, product_ids: list[UUID]) -> list[Product]:
+        from sqlalchemy import and_
+        from sqlalchemy.orm import selectinload
+        stmt = (
+            select(ProductModel)
+            .where(
+                and_(
+                    ProductModel.product_id.in_(product_ids),
+                    ProductModel.is_active.is_(True),
+                )
+            )
+            .options(selectinload(ProductModel.images))
+        )
+        rows = (await self._read.execute(stmt)).scalars().all()
+        return [_model_to_entity(row) for row in rows]
+
     async def get_slug_set(self) -> set[str]:
         stmt = select(ProductModel.slug)
         result = await self._read.execute(stmt)
@@ -337,7 +368,10 @@ class SQLAlchemyProductRepository(IProductRepository):
             if count == 0:
                 raise LookupError(f"Product {product_id} not found")
             raise ValueError(f"Insufficient stock to reserve {delta} units")
-        return _model_to_entity(row)
+        # Re-fetch with images eager-loaded; the row from RETURNING has no
+        # images relationship loaded, which triggers MissingGreenlet on access.
+        refreshed = await self._get_by_id_write(product_id)
+        return refreshed if refreshed else _model_to_entity(row)
 
     async def release_stock(self, product_id: UUID, delta: int) -> Product:
         stmt = (
@@ -350,4 +384,5 @@ class SQLAlchemyProductRepository(IProductRepository):
         row = result.scalar_one_or_none()
         if row is None:
             raise LookupError(f"Product {product_id} not found")
-        return _model_to_entity(row)
+        refreshed = await self._get_by_id_write(product_id)
+        return refreshed if refreshed else _model_to_entity(row)

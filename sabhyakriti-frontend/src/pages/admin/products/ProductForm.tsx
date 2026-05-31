@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Upload, X } from 'lucide-react';
 import type { Product, Category } from '@/types';
-import { createProduct, updateProduct, getProductBySlug, listCategories, getPresignedUrl, confirmImageUpload } from '@/services/productService';
+import { createProduct, updateProduct, getProductById, listCategories, getPresignedUrl, confirmImageUpload } from '@/services/productService';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
@@ -31,7 +31,7 @@ const ProductForm: React.FC = () => {
   useEffect(() => {
     listCategories().then(setCategories).catch(() => null);
     if (isEdit && id) {
-      getProductBySlug(id)
+      getProductById(id)
         .then((p: Product) => {
           setForm({
             name: p.name, sku: p.sku, description: p.description,

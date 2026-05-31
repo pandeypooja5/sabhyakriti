@@ -5,12 +5,12 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answers — Q1:A (7-day return) Q2:B (3-5 days refund) Q3:A (partial returns) Q4:A (GST invoice)
-- [x] Step 2: Analyze answers — NO ambiguities detected
-- [x] Step 3: Generate domain-entities.md
-- [x] Step 4: Generate business-rules.md
-- [x] Step 5: Generate business-logic-model.md
-- [x] Step 6: Present for approval
+- [ ] Step 1: Answer business logic questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers for ambiguities
+- [ ] Step 3: Generate domain-entities.md
+- [ ] Step 4: Generate business-rules.md
+- [ ] Step 5: Generate business-logic-model.md
+- [ ] Step 6: Present for approval
 
 ---
 
@@ -38,7 +38,7 @@ B) 14 days after delivery
 C) 30 days after delivery
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -50,7 +50,7 @@ B) 3–5 business days
 C) Instant refund to original payment source (within minutes via Razorpay instant refund)
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -61,7 +61,7 @@ A) Yes — customer selects which specific items to return
 B) No — return must be for the entire order only
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -72,4 +72,4 @@ A) Standard GST invoice — seller details, GSTIN, buyer details, itemised list 
 B) Simplified receipt — order number, items, amounts, no GSTIN/HSN codes required
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A

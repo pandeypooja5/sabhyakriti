@@ -41,8 +41,9 @@ class ProductPriceDTO:
 class ProductServiceClient:
     """HTTP client for Product Service — used by Cart Application Service."""
 
-    def __init__(self, base_url: str) -> None:
+    def __init__(self, base_url: str, internal_secret: str = "") -> None:
         self._base_url = base_url.rstrip("/")
+        self._internal_secret = internal_secret
 
     @retry(
         retry=retry_if_exception_type(httpx.ConnectError),
@@ -73,11 +74,14 @@ class ProductServiceClient:
         payload = {"product_ids": [str(pid) for pid in product_ids]}
 
         try:
+            headers = {}
+            if self._internal_secret:
+                headers["X-Internal-Secret"] = self._internal_secret
             async with httpx.AsyncClient(
                 base_url=self._base_url,
                 timeout=_TIMEOUT_SECONDS,
             ) as client:
-                response = await client.post(_BATCH_PATH, json=payload)
+                response = await client.post(_BATCH_PATH, json=payload, headers=headers)
                 response.raise_for_status()
                 data: list[dict[str, object]] = response.json()
                 return {

@@ -5,12 +5,12 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answer business logic questions — Q1:A Q2:B Q3:A Q4:A Q5:C
-- [x] Step 2: Analyze answers — NO ambiguities detected
-- [x] Step 3: Generate domain-entities.md
-- [x] Step 4: Generate business-rules.md
-- [x] Step 5: Generate business-logic-model.md
-- [x] Step 6: Present for approval
+- [ ] Step 1: Answer business logic questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers for ambiguities
+- [ ] Step 3: Generate domain-entities.md
+- [ ] Step 4: Generate business-rules.md
+- [ ] Step 5: Generate business-logic-model.md
+- [ ] Step 6: Present for approval
 
 ---
 
@@ -38,7 +38,7 @@ B) Free above ₹999; ₹99 flat fee below ₹999 (before discounts)
 C) Free above ₹1499; ₹149 flat fee below ₹1499 (before discounts)
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C
 
 ---
 
@@ -49,7 +49,7 @@ A) Prices are GST-inclusive — show "Inclusive of all taxes" with no separate l
 B) Show GST (5% on sarees) as a separate line item — e.g., Subtotal ₹1000 + GST ₹50 = Total ₹1050
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -60,7 +60,7 @@ A) Cart persists indefinitely — never expires (simplest approach)
 B) Cart items are cleared after 30 days of inactivity (last_updated_at > 30 days ago)
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -71,7 +71,7 @@ A) One coupon at a time — applying a new coupon replaces the existing one
 B) Stack up to 2 coupons — one flat discount + one percentage discount simultaneously
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -83,4 +83,4 @@ B) Yes — cap at ₹1000 maximum discount
 C) No cap — full percentage discount applied to any cart value
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: C

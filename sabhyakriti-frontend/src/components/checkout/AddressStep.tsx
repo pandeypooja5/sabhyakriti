@@ -4,6 +4,7 @@ import type { Address } from '@/types';
 import { listAddresses, addAddress } from '@/services/orderService';
 import { isValidIndianPhone, isValidPincode } from '@/utils/validation';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 
 interface AddressStepProps {
@@ -58,8 +59,9 @@ const AddressStep: React.FC<AddressStepProps> = ({ onNext }) => {
       setSelected(newAddr.id);
       setShowForm(false);
       setForm(blankAddress);
-    } catch {
-      // toast handled above
+      toast.success('Address saved successfully');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to save address');
     } finally {
       setSaving(false);
     }
