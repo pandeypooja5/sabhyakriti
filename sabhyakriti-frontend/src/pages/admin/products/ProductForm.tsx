@@ -94,20 +94,21 @@ const ProductForm: React.FC = () => {
   const uploadImage = async (file: File, productId: string) => {
     setUploadingImage(true);
     try {
-      const { presignedUrl, s3Key } = await getPresignedUrl(productId, file.name, file.type);
-      const imageUrl = presignedUrl.split('?')[0];
-
-      // Attempt S3 upload — may fail locally without real AWS credentials
-      try {
-        await axios.put(presignedUrl, file, { headers: { 'Content-Type': file.type } });
-      } catch (s3Err: unknown) {
-        // In local dev without real AWS credentials the PUT will fail.
-        // We still register the image record so the product can be saved.
-        console.warn('S3 upload failed (local dev without AWS credentials):', s3Err);
-      }
-
+      // Use direct local upload endpoint — no S3 needed
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await axios.post(
+        `/api/v1/products/${productId}/images/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth_tokens') || '{}').accessToken ?? ''}`,
+          },
+        },
+      );
+      const imageUrl: string = res.data.url;
       setImageUrls((prev) => [...prev, imageUrl]);
-      await confirmImageUpload(productId, s3Key, imageUrls.length === 0);
       toast.success('Image uploaded');
     } catch (err) {
       console.error('Image upload error:', err);
