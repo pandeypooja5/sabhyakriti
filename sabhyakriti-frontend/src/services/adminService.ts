@@ -14,7 +14,21 @@ import type {
 
 export const getDashboard = async (): Promise<{ kpis: DashboardKPIs; recentOrders: Order[] }> => {
   const res = await apiClient.get('/admin/dashboard');
-  return res.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const d = res.data as any;
+  const kpis: DashboardKPIs = {
+    totalRevenue: Number(d.revenue_30d ?? d.totalRevenue ?? 0),
+    totalOrders: Number(d.orders_30d ?? d.totalOrders ?? 0),
+    totalCustomers: Number(d.new_customers_30d ?? d.totalCustomers ?? 0),
+    totalProducts: Number(d.low_stock_products ?? d.totalProducts ?? 0),
+    averageOrderValue: Number(d.average_order_value ?? d.averageOrderValue ?? 0),
+    pendingReturns: Number(d.pending_returns ?? d.pendingReturns ?? 0),
+    revenueGrowth: Number(d.revenue_growth ?? d.revenueGrowth ?? 0),
+    orderGrowth: Number(d.order_growth ?? d.orderGrowth ?? 0),
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recentOrders: Order[] = (d.recent_orders ?? d.recentOrders ?? []).map((o: any) => normalizeOrder(o));
+  return { kpis, recentOrders };
 };
 
 export const getSalesReport = async (from: string, to: string): Promise<SalesReport> => {
