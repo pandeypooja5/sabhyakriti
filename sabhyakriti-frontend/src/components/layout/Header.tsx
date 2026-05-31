@@ -49,12 +49,20 @@ const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-ivory-100/95 backdrop-blur-sm border-b border-ivory-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div className="flex items-center justify-between h-24 gap-4">
           {/* Logo + Brand Name */}
-          <Link to="/" className="flex items-center gap-3 flex-shrink-0" data-testid="header-logo">
-            <img src="/logo.png" alt="SabhyaKriti" className="h-16 w-auto hidden sm:block" />
-            <img src="/logo.png" alt="SabhyaKriti" className="h-14 w-auto sm:hidden" />
-            <span className="hidden sm:inline font-playfair font-bold text-xl" style={{ color: '#8B1A1A' }}>SabhyaKriti</span>
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0" data-testid="header-logo">
+            <img src="/logo.png" alt="SabhyaKriti" className="h-24 w-auto hidden sm:block" />
+            <img src="/logo.png" alt="SabhyaKriti" className="h-20 w-auto sm:hidden" />
+            <div className="hidden sm:flex flex-col leading-tight">
+              <span className="font-playfair font-bold text-3xl tracking-wide">
+                <span style={{ color: '#C9A042' }}>Sabhya</span>
+                <span style={{ color: '#8B1A1A' }}>Kriti</span>
+              </span>
+              <span className="font-playfair text-sm tracking-wide" style={{ color: '#8B6914' }}>
+                Saree that speaks Tradition
+              </span>
+            </div>
           </Link>
 
           {/* Expandable Search */}
