@@ -5,8 +5,8 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answers — Q1:A (Twilio→SNS fallback) Q2:A (DB log) Q3:A (Sabhyakriti no-reply@)
-- [x] Step 2: Analyze answers — NO ambiguities
+- [ ] Step 1: Answer business logic questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers
 - [ ] Step 3: Generate artifacts + code
 - [ ] Step 4: Present for approval
 
@@ -36,7 +36,7 @@ A) Yes — try Twilio first (2 retries), then automatically fallback to SNS if T
 B) No — log the failure and give up; no SNS fallback (simpler, SNS requires additional setup)
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -47,7 +47,7 @@ A) Yes — log each send attempt (notification type, recipient, channel, status,
 B) No — log to CloudWatch only; no separate DB table needed
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B
 
 ---
 
@@ -58,4 +58,4 @@ A) "Sabhyakriti" <no-reply@sabhyakriti.com> — clean brand name
 B) "Sabhyakriti Store" <orders@sabhyakriti.com> — more specific
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A

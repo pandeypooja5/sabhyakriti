@@ -5,10 +5,10 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answers — Q1:B (last 30 days) Q2:A (view-only)
-- [x] Step 2: Analyze answers — NO ambiguities
-- [x] Step 3: Generate artifacts + code
-- [x] Step 4: Present for approval
+- [ ] Step 1: Answer questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers
+- [ ] Step 3: Generate artifacts + code
+- [ ] Step 4: Present for approval
 
 ---
 
@@ -38,7 +38,7 @@ B) Last 30 days — rolling 30-day window (more representative)
 C) Today + month-to-date — two KPI cards: today's numbers and this month's total
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -50,4 +50,4 @@ B) Downloadable CSV — admin can export the report data as a CSV file
 C) Both — view in UI and download as CSV
 D) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: B

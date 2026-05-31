@@ -5,11 +5,11 @@
 
 ## Execution Checklist
 
-- [x] Step 1: Answers — Q1:A (homepage) Q2:A (pinch-to-zoom+lightbox) Q3:A (light only)
-- [x] Step 2: Analyze answers — NO ambiguities
-- [x] Step 3: Generate functional design + component hierarchy
-- [x] Step 4: Generate code
-- [x] Step 5: Present for approval
+- [ ] Step 1: Answer questions (user fills [Answer]: tags below)
+- [ ] Step 2: Analyze answers
+- [ ] Step 3: Generate functional design + component hierarchy
+- [ ] Step 4: Generate code
+- [ ] Step 5: Present for approval
 
 ---
 
@@ -34,7 +34,7 @@ A) Dedicated homepage — hero banner with brand story + "Shop Now" CTA, feature
 B) PLP is the homepage — root URL `/` renders the full product listing directly (simpler, faster path to products)
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -45,7 +45,7 @@ A) Yes — pinch-to-zoom on mobile + click-to-zoom lightbox on desktop (already 
 B) No — full-screen lightbox on click is sufficient; no pinch-to-zoom needed
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
 
 ---
 
@@ -56,4 +56,4 @@ A) No — light mode only (saffron + teal theme); simpler to build and maintain
 B) Yes — light/dark toggle stored in user preferences
 C) Other (please describe after [Answer]: tag below)
 
-[Answer]: 
+[Answer]: A
