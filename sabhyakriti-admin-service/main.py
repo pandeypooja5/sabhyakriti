@@ -132,7 +132,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.order_client = order_client
     app.state.cart_client = cart_client
 
-    logger.info("admin_service.started", port=os.getenv("PORT", "8007"))
+    logger.info("admin_service.started", port=os.getenv("PORT", 8000))
 
     yield  # application runs here
 
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=int(os.getenv("PORT", "8007")),
+        port=int(os.getenv("PORT", 8000)),
         reload=False,
         workers=1,  # single worker in dev; Dockerfile uses 2
     )

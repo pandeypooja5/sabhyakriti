@@ -20,10 +20,10 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-EXPOSE 8007
+EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8007
+    PORT=8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8007", "--workers", "2"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT} --workers 2"]
