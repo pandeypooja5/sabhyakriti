@@ -59,7 +59,7 @@ const Header: React.FC = () => {
                 <span style={{ color: '#C9A042' }}>Sabhya</span>
                 <span style={{ color: '#8B1A1A' }}>Kriti</span>
               </span>
-              <span className="font-cormorant italic text-xs tracking-widest" style={{ color: '#8B6914' }}>
+              <span className="font-playfair text-sm tracking-wide" style={{ color: '#8B6914' }}>
                 Saree that speaks Tradition
               </span>
             </div>
