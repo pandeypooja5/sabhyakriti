@@ -196,7 +196,7 @@ async def confirm_image_upload(
 @router.post(
     "/{product_id}/images/upload",
     status_code=201,
-    summary="Upload image file directly (local/dev — no S3 needed)",
+    summary="Upload image directly — local disk in dev, Cloudflare R2 in prod",
 )
 async def upload_image_local(
     product_id: UUID,
@@ -206,35 +206,40 @@ async def upload_image_local(
     read_db: Annotated[AsyncSession, Depends(get_read_db)],
     _admin: Annotated[CurrentUser, Depends(require_admin)],
 ) -> JSONResponse:
-    """Save image directly to uploads/local/{product_id}/ and register the record."""
-    env = os.environ.get("ENVIRONMENT", "development")
-    subfolder = "local" if env == "development" else "prod"
-
-    # Save to uploads/{subfolder}/products/{product_id}/ so it's served at
-    # /uploads/{subfolder}/products/{product_id}/{filename}
-    # which matches build_cdn_url("products/{pid}/{file}", "host/uploads/{subfolder}")
-    uploads_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "uploads", subfolder, "products", str(product_id),
-    )
-    os.makedirs(uploads_dir, exist_ok=True)
-
-    ext = os.path.splitext(file.filename or "image.jpg")[1] or ".jpg"
-    filename = f"{_uuid.uuid4()}{ext}"
-    filepath = os.path.join(uploads_dir, filename)
-
-    contents = await file.read()
-    with open(filepath, "wb") as f:
-        f.write(contents)
-
-    # s3_key must have products/{product_id}/ prefix (validated by confirm_image_upload)
-    s3_key = f"products/{product_id}/{filename}"
-
-    # Register via service — build_cdn_url(s3_key, cloudfront_domain) produces the URL
-    svc = _build_product_service(request, write_db, read_db)
+    """In development: save to uploads/local/ on disk and serve via StaticFiles.
+    In production with R2 configured: upload directly to Cloudflare R2.
+    """
+    import io
     from application.dtos.product_dtos import ConfirmImageUploadRequest
     from infrastructure.persistence.models import ProductImageModel
     from sqlalchemy import select as _select
+
+    env = os.environ.get("ENVIRONMENT", "development")
+    r2_configured = bool(os.environ.get("R2_ACCOUNT_ID"))
+
+    ext = os.path.splitext(file.filename or "image.jpg")[1] or ".jpg"
+    filename = f"{_uuid.uuid4()}{ext}"
+    s3_key = f"products/{product_id}/{filename}"
+    contents = await file.read()
+
+    if r2_configured and env != "development":
+        # ── Production: upload to Cloudflare R2 ──────────────────────────────
+        s3_adapter = request.app.state.service_factory._s3
+        s3_adapter.upload_fileobj(
+            io.BytesIO(contents), s3_key, file.content_type or "image/jpeg"
+        )
+    else:
+        # ── Development: save to local disk ──────────────────────────────────
+        subfolder = "local"
+        uploads_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            "uploads", subfolder, "products", str(product_id),
+        )
+        os.makedirs(uploads_dir, exist_ok=True)
+        with open(os.path.join(uploads_dir, filename), "wb") as f:
+            f.write(contents)
+
+    svc = _build_product_service(request, write_db, read_db)
     existing = (await read_db.execute(
         _select(ProductImageModel).where(ProductImageModel.product_id == product_id)
     )).first()

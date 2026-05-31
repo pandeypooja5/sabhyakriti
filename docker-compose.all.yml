@@ -76,8 +76,12 @@ services:
       <<: [*common-env, *db-primary, *service-urls]
       PORT: 8002
       REDIS_URL: redis://redis:6379/1
-      S3_BUCKET_NAME: local-dev-bucket
+      S3_BUCKET_NAME: ${R2_BUCKET_NAME:-local-dev-bucket}
       CLOUDFRONT_DOMAIN: localhost:8002/uploads/local
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      R2_PUBLIC_DOMAIN: ${R2_PUBLIC_DOMAIN:-}
     env_file: [".env.local"]
     volumes:
       - ./sabhyakriti-product-service/uploads:/app/uploads
