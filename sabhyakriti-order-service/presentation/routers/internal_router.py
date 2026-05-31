@@ -74,14 +74,14 @@ async def check_verified_purchase(
 # Admin-facing internal endpoints (called by Admin Service dashboard)
 # ---------------------------------------------------------------------------
 
-@admin_router.get("/recent-orders", response_model=list[OrderSummaryDTO])
+@admin_router.get("/recent-orders", response_model=list[OrderDTO])
 async def get_recent_orders(
     order_svc: Annotated[OrderApplicationService, Depends(get_order_service)],
     limit: int = Query(default=10, ge=1, le=50),
-) -> list[OrderSummaryDTO]:
-    """Return the most recent orders across all statuses (for dashboard)."""
-    result = await order_svc.admin_list_orders(page=1, page_size=limit)
-    return result.items
+) -> list[OrderDTO]:
+    """Return the most recent full orders (with shipping address) for dashboard."""
+    orders = await order_svc.admin_list_orders_full(page=1, page_size=limit)
+    return orders
 
 
 @admin_router.get("/stats")

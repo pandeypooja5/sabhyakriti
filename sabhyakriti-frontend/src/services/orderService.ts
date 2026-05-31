@@ -76,7 +76,7 @@ export function normalizeOrder(raw: any): Order {
     couponCode: r.coupon_code ?? undefined,
     cancelReason: r.cancellation_reason ?? undefined,
     deliveredAt: r.delivered_at ?? undefined,
-    createdAt: r.created_at ?? r.createdAt ?? '',
+    createdAt: r.created_at ?? r.createdAt ?? r.placed_at ?? '',
     updatedAt: r.updated_at ?? r.updatedAt ?? '',
   } as Order;
 }

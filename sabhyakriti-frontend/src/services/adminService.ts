@@ -27,7 +27,14 @@ export const getDashboard = async (): Promise<{ kpis: DashboardKPIs; recentOrder
     orderGrowth: Number(d.order_growth ?? d.orderGrowth ?? 0),
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recentOrders: Order[] = (d.recent_orders ?? d.recentOrders ?? []).map((o: any) => normalizeOrder(o));
+  const recentOrders: Order[] = (d.recent_orders ?? d.recentOrders ?? []).map((o: any) => {
+    const order = normalizeOrder(o);
+    // Prefer customer_name from summary if shipping_address is missing
+    if (!order.shippingAddress.name && o.customer_name) {
+      order.shippingAddress = { ...order.shippingAddress, name: o.customer_name };
+    }
+    return order;
+  });
   return { kpis, recentOrders };
 };
 
