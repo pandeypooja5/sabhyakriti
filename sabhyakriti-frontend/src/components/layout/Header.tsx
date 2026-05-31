@@ -54,7 +54,7 @@ const Header: React.FC = () => {
           <Link to="/" className="flex items-center gap-2 flex-shrink-0" data-testid="header-logo">
             <img src="/logo.png" alt="SabhyaKriti" className="h-24 w-auto hidden sm:block" />
             <img src="/logo.png" alt="SabhyaKriti" className="h-20 w-auto sm:hidden" />
-            <span className="hidden sm:inline font-playfair font-bold text-xl">
+            <span className="hidden sm:inline font-playfair font-bold text-3xl tracking-wide">
               <span style={{ color: '#C9A042' }}>Sabhya</span>
               <span style={{ color: '#8B1A1A' }}>Kriti</span>
             </span>
