@@ -58,6 +58,7 @@ services:
     ports: ["8001:8001"]
     environment:
       <<: [*common-env, *db-primary]
+      PORT: 8001
       REDIS_URL: redis://redis:6379/0
       FRONTEND_ORIGIN: http://localhost:5173
     env_file: [".env.local"]
@@ -73,6 +74,7 @@ services:
     ports: ["8002:8002"]
     environment:
       <<: [*common-env, *db-primary, *service-urls]
+      PORT: 8002
       REDIS_URL: redis://redis:6379/1
       S3_BUCKET_NAME: local-dev-bucket
       CLOUDFRONT_DOMAIN: localhost:8002/static
@@ -88,6 +90,7 @@ services:
     ports: ["8003:8003"]
     environment:
       <<: [*common-env, *db-primary, *service-urls]
+      PORT: 8003
       FRONTEND_ORIGIN: http://localhost:5173
     env_file: [".env.local"]
     depends_on:
@@ -101,6 +104,7 @@ services:
     ports: ["8004:8004"]
     environment:
       <<: [*common-env, *db-primary, *service-urls]
+      PORT: 8004
       SELLER_GSTIN: 27AAPFU0939F1ZV
       SELLER_ADDRESS: "Sabhyakriti, Mumbai, Maharashtra - 400001"
       FRONTEND_ORIGIN: http://localhost:5173
@@ -116,6 +120,7 @@ services:
     ports: ["8005:8005"]
     environment:
       <<: [*common-env, *db-primary, *service-urls]
+      PORT: 8005
       FRONTEND_ORIGIN: http://localhost:5173
     env_file: [".env.local"]
     depends_on:
@@ -129,6 +134,7 @@ services:
     ports: ["8006:8006"]
     environment:
       <<: [*common-env, *db-primary, *service-urls]
+      PORT: 8006
       SES_FROM_EMAIL: no-reply@sabhyakriti.com
       SES_FROM_NAME: Sabhyakriti
     env_file: [".env.local"]
@@ -143,6 +149,7 @@ services:
     ports: ["8007:8007"]
     environment:
       <<: [*common-env, *service-urls]
+      PORT: 8007
       FRONTEND_ORIGIN: http://localhost:5173
     env_file: [".env.local"]
     depends_on:

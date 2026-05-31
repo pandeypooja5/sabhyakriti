@@ -1,4 +1,5 @@
 import apiClient from './apiClient';
+import { normalizeOrder } from './orderService';
 import type {
   DashboardKPIs,
   SalesReport,
@@ -41,7 +42,16 @@ export const listAllOrders = async (
   search?: string
 ): Promise<PaginatedResponse<Order>> => {
   const res = await apiClient.get('/admin/orders', { params: { page, status, search } });
-  return res.data;
+  const d = res.data ?? {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = (d.items ?? d.data ?? []) as any[];
+  return {
+    data: items.map(normalizeOrder),
+    total: Number(d.total ?? items.length),
+    page: Number(d.page ?? page),
+    pageSize: Number(d.page_size ?? d.pageSize ?? 20),
+    totalPages: Number(d.total_pages ?? d.totalPages ?? 1),
+  };
 };
 
 export const updateOrderStatus = async (
@@ -51,11 +61,11 @@ export const updateOrderStatus = async (
   courierName?: string
 ): Promise<Order> => {
   const res = await apiClient.patch(`/admin/orders/${orderId}/status`, {
-    status,
-    trackingNumber,
-    courierName,
+    new_status: status,
+    tracking_number: trackingNumber,
+    courier_name: courierName,
   });
-  return res.data.order ?? res.data;
+  return normalizeOrder(res.data.order ?? res.data);
 };
 
 // ─── Returns ──────────────────────────────────────────────────────────────────

@@ -120,7 +120,11 @@ async def get_current_user(
             options={"verify_aud": False},
         )
         user_id: str = payload.get("sub", "")
+        # Auth service uses singular "role" claim (e.g. "ADMIN"), not "roles"
+        role_str: str = payload.get("role", "")
         roles: list[str] = payload.get("roles", [])
+        if role_str and role_str.lower() not in roles:
+            roles = [role_str.lower()] + roles
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
