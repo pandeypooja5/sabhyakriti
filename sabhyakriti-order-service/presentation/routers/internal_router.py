@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, Query
 from application.dtos.order_dtos import (
     ConfirmOrderRequest,
     OrderDTO,
+    OrderSummaryDTO,
     VerifiedPurchaseResponse,
 )
 from application.services.order_application_service import OrderApplicationService
@@ -18,6 +19,13 @@ from presentation.dependencies import get_order_service, verify_internal_secret
 router = APIRouter(
     prefix="/internal/v1",
     tags=["Internal"],
+    dependencies=[Depends(verify_internal_secret)],
+)
+
+# Admin internal router (used by Admin Service dashboard)
+admin_router = APIRouter(
+    prefix="/internal/admin",
+    tags=["Internal-Admin"],
     dependencies=[Depends(verify_internal_secret)],
 )
 
@@ -60,3 +68,43 @@ async def check_verified_purchase(
         order_number="",
         is_eligible=eligible,
     )
+
+
+# ---------------------------------------------------------------------------
+# Admin-facing internal endpoints (called by Admin Service dashboard)
+# ---------------------------------------------------------------------------
+
+@admin_router.get("/recent-orders", response_model=list[OrderDTO])
+async def get_recent_orders(
+    order_svc: Annotated[OrderApplicationService, Depends(get_order_service)],
+    limit: int = Query(default=10, ge=1, le=50),
+) -> list[OrderDTO]:
+    """Return the most recent full orders (with shipping address) for dashboard."""
+    orders = await order_svc.admin_list_orders_full(page=1, page_size=limit)
+    return orders
+
+
+@admin_router.get("/stats")
+async def get_dashboard_stats(
+    order_svc: Annotated[OrderApplicationService, Depends(get_order_service)],
+    days: int = Query(default=30, ge=1, le=365),
+) -> dict:
+    """Return aggregated revenue and order count for last *days* days."""
+    result = await order_svc.admin_list_orders(page=1, page_size=1000)
+    return {
+        "revenue": str(sum(o.total_amount for o in result.items)),
+        "order_count": result.total,
+    }
+
+
+@admin_router.get("/pending-counts")
+async def get_pending_counts(
+    order_svc: Annotated[OrderApplicationService, Depends(get_order_service)],
+) -> dict:
+    """Return count of pending orders and pending returns."""
+    from application.dtos.order_dtos import OrderStatus
+    pending = await order_svc.admin_list_orders(page=1, page_size=1, status="PENDING")
+    return {
+        "pending_orders": pending.total,
+        "pending_returns": 0,
+    }

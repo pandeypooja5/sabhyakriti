@@ -9,6 +9,7 @@ from typing import AsyncGenerator
 import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from redis.asyncio import Redis
 
@@ -256,6 +257,12 @@ def create_app() -> FastAPI:
         allow_methods=["GET", "POST", "PATCH", "DELETE"],
         allow_headers=["*"],
     )
+
+    # Serve uploaded images from local disk (dev) and prod subfolder
+    uploads_path = os.path.join(os.path.dirname(__file__), "uploads")
+    os.makedirs(os.path.join(uploads_path, "local"), exist_ok=True)
+    os.makedirs(os.path.join(uploads_path, "prod"), exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
     # Routers
     app.include_router(health_router.router)

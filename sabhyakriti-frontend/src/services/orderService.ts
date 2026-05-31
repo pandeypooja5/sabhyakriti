@@ -2,7 +2,7 @@ import apiClient from './apiClient';
 import type { Order, Address, PaginatedResponse, Cart } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalizeOrder(raw: any): Order {
+export function normalizeOrder(raw: any): Order {
   const r = raw ?? {};
   const addr = r.shipping_address ?? r.shippingAddress ?? {};
   const gst = Number(r.cgst_amount ?? 0) + Number(r.sgst_amount ?? 0);
@@ -76,7 +76,7 @@ function normalizeOrder(raw: any): Order {
     couponCode: r.coupon_code ?? undefined,
     cancelReason: r.cancellation_reason ?? undefined,
     deliveredAt: r.delivered_at ?? undefined,
-    createdAt: r.created_at ?? r.createdAt ?? '',
+    createdAt: r.created_at ?? r.createdAt ?? r.placed_at ?? '',
     updatedAt: r.updated_at ?? r.updatedAt ?? '',
   } as Order;
 }

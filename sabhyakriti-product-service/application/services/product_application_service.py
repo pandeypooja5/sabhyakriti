@@ -324,7 +324,10 @@ class ProductApplicationService:
 
         saved = await self._products.create(product)
         await self._cache.invalidate_all()
-        return await self._build_detail_dto(saved)
+        # Re-fetch via read session so images/categories are loaded without
+        # triggering MissingGreenlet on the write session.
+        fetched = await self._products.get_by_id(saved.product_id)
+        return await self._build_detail_dto(fetched if fetched else saved)
 
     async def update_product(
         self, product_id: UUID, request: UpdateProductRequest

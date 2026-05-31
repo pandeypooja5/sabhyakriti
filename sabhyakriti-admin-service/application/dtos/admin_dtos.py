@@ -23,6 +23,8 @@ class OrderSummaryDTO(BaseModel):
     total_amount: Decimal = Field(decimal_places=2)
     placed_at: datetime
     item_count: int
+    customer_name: str = ""
+    created_at: str = ""
 
 
 class RevenueDayDTO(BaseModel):

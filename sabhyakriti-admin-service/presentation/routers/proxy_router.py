@@ -183,6 +183,29 @@ async def proxy_categories(
 # ---------------------------------------------------------------------------
 
 @router.api_route(
+    "/orders",
+    methods=["GET", "POST"],
+    include_in_schema=True,
+    summary="Proxy: Order Service — list/create orders (admin)",
+)
+async def proxy_orders_root(
+    request: Request,
+    _: AdminUser,
+    order_client: Annotated[OrderServiceClient, Depends(_get_order_client)],
+) -> Response:
+    headers = forward_headers(request)
+    body = await request.body()
+    return await _safe_proxy(
+        order_client,
+        request.method,
+        "/api/v1/admin/orders",
+        headers={**headers, "content-type": request.headers.get("content-type", "")},
+        content=body or None,
+        params=dict(request.query_params),
+    )
+
+
+@router.api_route(
     "/orders/{path:path}",
     methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     include_in_schema=True,
