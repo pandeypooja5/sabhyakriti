@@ -27,6 +27,7 @@ const ProductForm: React.FC = () => {
     regionCategoryIds: [] as string[],
   });
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [draftProductId, setDraftProductId] = useState<string | null>(null);
 
   useEffect(() => {
     listCategories().then(setCategories).catch(() => null);
@@ -57,15 +58,48 @@ const ProductForm: React.FC = () => {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // For new products, require at least name and SKU before uploading
+    const productId = id ?? draftProductId;
+    if (!productId) {
+      if (!form.name.trim() || !form.sku.trim()) {
+        toast.error('Please enter product Name and SKU before uploading images');
+        return;
+      }
+      // Create a draft product so we have an ID for the presigned URL
+      try {
+        setSaving(true);
+        const draft = await createProduct({
+          name: form.name, sku: form.sku,
+          description: form.description || form.name,
+          mrp: Number(form.mrp) || 0, price: Number(form.price) || 0,
+          stockQuantity: Number(form.stockQuantity) || 0,
+          isActive: false, isFeatured: false,
+        });
+        setDraftProductId(draft.id);
+        setSaving(false);
+        // Re-trigger with the new product id
+        await uploadImage(file, draft.id);
+        return;
+      } catch {
+        setSaving(false);
+        toast.error('Could not create draft product for image upload');
+        return;
+      }
+    }
+
+    await uploadImage(file, productId);
+  };
+
+  const uploadImage = async (file: File, productId: string) => {
     setUploadingImage(true);
     try {
-      const { uploadUrl, key } = await getPresignedUrl(file.name, file.type);
-      await axios.put(uploadUrl, file, { headers: { 'Content-Type': file.type } });
-      const imageUrl = uploadUrl.split('?')[0];
+      const { presignedUrl, s3Key } = await getPresignedUrl(productId, file.name, file.type);
+      await axios.put(presignedUrl, file, { headers: { 'Content-Type': file.type } });
+      const imageUrl = presignedUrl.split('?')[0];
       setImageUrls((prev) => [...prev, imageUrl]);
+      await confirmImageUpload(productId, s3Key, imageUrls.length === 0);
       toast.success('Image uploaded');
-      // Confirm upload if product already exists
-      if (id) await confirmImageUpload(id, key, imageUrls.length === 0);
     } catch {
       toast.error('Image upload failed');
     } finally {
@@ -89,6 +123,10 @@ const ProductForm: React.FC = () => {
       if (isEdit && id) {
         await updateProduct(id, data);
         toast.success('Product updated');
+      } else if (draftProductId) {
+        // Draft was created during image upload — just update it with full data
+        await updateProduct(draftProductId, { ...data, isActive: data.isActive });
+        toast.success('Product created');
       } else {
         await createProduct(data);
         toast.success('Product created');

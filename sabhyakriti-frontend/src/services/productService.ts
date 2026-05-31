@@ -119,8 +119,12 @@ export const listCategories = async (type?: string): Promise<Category[]> => {
   return (res.data.categories ?? res.data ?? []).map((c: any) => normalizeCategory(c));
 };
 
-export const getPresignedUrl = async (productId: string, fileExtension: string): Promise<{ presignedUrl: string; s3Key: string }> => {
-  const res = await apiClient.post('/media/presigned-url', { product_id: productId, file_extension: fileExtension });
+export const getPresignedUrl = async (productId: string, filename: string, contentType: string): Promise<{ presignedUrl: string; s3Key: string }> => {
+  const res = await apiClient.post(
+    `/products/${productId}/images/presigned-url`,
+    null,
+    { params: { filename, content_type: contentType } },
+  );
   return { presignedUrl: res.data.presigned_url, s3Key: res.data.s3_key };
 };
 
