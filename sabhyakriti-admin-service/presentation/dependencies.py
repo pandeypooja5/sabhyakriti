@@ -63,9 +63,14 @@ def get_current_user(
 def require_admin(
     current_user: Annotated[dict[str, Any], Depends(get_current_user)],
 ) -> dict[str, Any]:
-    """Raise HTTP 403 if the authenticated user does not have the ADMIN role."""
+    """Raise HTTP 403 if the authenticated user does not have the ADMIN role.
+
+    Supports both 'role' (singular string, e.g. 'ADMIN') and 'roles' (list)
+    JWT claim formats emitted by the auth service.
+    """
     roles: list[str] = current_user.get("roles", [])
-    if "ADMIN" not in roles:
+    role_str: str = current_user.get("role", "")
+    if "ADMIN" not in roles and role_str.upper() != "ADMIN":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin role required",
