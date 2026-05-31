@@ -33,13 +33,14 @@ _MAX_REPORT_DAYS = 365
 
 def _parse_order(raw: dict[str, Any]) -> OrderSummaryDTO:
     """Map a raw order dict from the Order Service to an OrderSummaryDTO."""
+    placed_at_raw = raw.get("placed_at") or raw.get("created_at", "2000-01-01T00:00:00Z")
     return OrderSummaryDTO(
         order_id=UUID(str(raw["order_id"])),
         order_number=str(raw["order_number"]),
-        user_id=UUID(str(raw["user_id"])),
+        user_id=UUID(str(raw["user_id"])) if raw.get("user_id") else UUID(int=0),
         status=str(raw["status"]),
         total_amount=Decimal(str(raw.get("total_amount", "0"))),
-        placed_at=datetime.fromisoformat(str(raw["placed_at"])),
+        placed_at=datetime.fromisoformat(str(placed_at_raw).replace("Z", "+00:00")),
         item_count=int(raw.get("item_count", 0)),
     )
 

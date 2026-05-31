@@ -36,7 +36,7 @@ from presentation.middleware.security_headers import SecurityHeadersMiddleware
 from presentation.routers.address_router import router as address_router
 from presentation.routers.admin_order_router import router as admin_router
 from presentation.routers.health_router import router as health_router
-from presentation.routers.internal_router import router as internal_router
+from presentation.routers.internal_router import router as internal_router, admin_router as internal_admin_router
 from presentation.routers.order_router import router as order_router
 
 
@@ -158,6 +158,7 @@ def create_app() -> FastAPI:
     app.include_router(admin_router)
     app.include_router(address_router)
     app.include_router(internal_router)
+    app.include_router(internal_admin_router)
 
     return app
 
