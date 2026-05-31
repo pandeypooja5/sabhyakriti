@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -42,7 +43,7 @@ class Settings(BaseSettings):
 
     # App
     app_env: str = "production"
-    app_port: int = 8004
+    app_port: int = int(os.getenv("PORT", 8000))
 
 
 @lru_cache

@@ -405,6 +405,21 @@ class OrderApplicationService:
             total_pages=total_pages,
         )
 
+    async def admin_list_orders_full(
+        self,
+        page: int,
+        page_size: int,
+        status: str | None = None,
+    ) -> list[OrderDTO]:
+        """Return paginated list of all orders as full DTOs (with shipping address)."""
+        status_filter = OrderStatus(status) if status else None
+        orders, _ = await self._order_repo.list_all(
+            page=page,
+            page_size=page_size,
+            status=status_filter,
+        )
+        return [_map_order_to_dto(o) for o in orders]
+
     # ------------------------------------------------------------------
     # Flow 6: Admin — Update Order Status
     # ------------------------------------------------------------------

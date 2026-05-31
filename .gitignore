@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+*.egg-info/
+
+# Node
+node_modules/
+sabhyakriti-frontend/dist/
+
+# Local uploads (images stored on disk in dev — not committed)
+sabhyakriti-product-service/uploads/local/*
+sabhyakriti-product-service/uploads/prod/*
+# Keep the folders themselves tracked
+!sabhyakriti-product-service/uploads/local/.gitkeep
+!sabhyakriti-product-service/uploads/prod/.gitkeep
+
+# Editor
+.DS_Store
+*.swp
+*.swo

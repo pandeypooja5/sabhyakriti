@@ -1,4 +1,5 @@
 import apiClient from './apiClient';
+import { normalizeOrder } from './orderService';
 import type {
   DashboardKPIs,
   SalesReport,
@@ -13,7 +14,28 @@ import type {
 
 export const getDashboard = async (): Promise<{ kpis: DashboardKPIs; recentOrders: Order[] }> => {
   const res = await apiClient.get('/admin/dashboard');
-  return res.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const d = res.data as any;
+  const kpis: DashboardKPIs = {
+    totalRevenue: Number(d.revenue_30d ?? d.totalRevenue ?? 0),
+    totalOrders: Number(d.orders_30d ?? d.totalOrders ?? 0),
+    totalCustomers: Number(d.new_customers_30d ?? d.totalCustomers ?? 0),
+    totalProducts: Number(d.low_stock_products ?? d.totalProducts ?? 0),
+    averageOrderValue: Number(d.average_order_value ?? d.averageOrderValue ?? 0),
+    pendingReturns: Number(d.pending_returns ?? d.pendingReturns ?? 0),
+    revenueGrowth: Number(d.revenue_growth ?? d.revenueGrowth ?? 0),
+    orderGrowth: Number(d.order_growth ?? d.orderGrowth ?? 0),
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recentOrders: Order[] = (d.recent_orders ?? d.recentOrders ?? []).map((o: any) => {
+    const order = normalizeOrder(o);
+    // Prefer customer_name from summary if shipping_address is missing
+    if (!order.shippingAddress.name && o.customer_name) {
+      order.shippingAddress = { ...order.shippingAddress, name: o.customer_name };
+    }
+    return order;
+  });
+  return { kpis, recentOrders };
 };
 
 export const getSalesReport = async (from: string, to: string): Promise<SalesReport> => {
@@ -41,7 +63,16 @@ export const listAllOrders = async (
   search?: string
 ): Promise<PaginatedResponse<Order>> => {
   const res = await apiClient.get('/admin/orders', { params: { page, status, search } });
-  return res.data;
+  const d = res.data ?? {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = (d.items ?? d.data ?? []) as any[];
+  return {
+    data: items.map(normalizeOrder),
+    total: Number(d.total ?? items.length),
+    page: Number(d.page ?? page),
+    pageSize: Number(d.page_size ?? d.pageSize ?? 20),
+    totalPages: Number(d.total_pages ?? d.totalPages ?? 1),
+  };
 };
 
 export const updateOrderStatus = async (
@@ -51,11 +82,11 @@ export const updateOrderStatus = async (
   courierName?: string
 ): Promise<Order> => {
   const res = await apiClient.patch(`/admin/orders/${orderId}/status`, {
-    status,
-    trackingNumber,
-    courierName,
+    new_status: status,
+    tracking_number: trackingNumber,
+    courier_name: courierName,
   });
-  return res.data.order ?? res.data;
+  return normalizeOrder(res.data.order ?? res.data);
 };
 
 // ─── Returns ──────────────────────────────────────────────────────────────────

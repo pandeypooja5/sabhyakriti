@@ -292,8 +292,15 @@ class SQLAlchemyProductRepository(IProductRepository):
             )
 
         await self._write.flush()
-        await self._write.refresh(model)
-        return _model_to_entity(model)
+        # Eager-load images via explicit SELECT to avoid MissingGreenlet on refresh
+        from sqlalchemy.orm import selectinload
+        stmt = (
+            select(ProductModel)
+            .where(ProductModel.product_id == product.product_id)
+            .options(selectinload(ProductModel.images))
+        )
+        row = (await self._write.execute(stmt)).scalar_one()
+        return _model_to_entity(row)
 
     async def update(self, product_id: UUID, updates: dict[str, Any]) -> Product:
         from sqlalchemy.orm import selectinload
