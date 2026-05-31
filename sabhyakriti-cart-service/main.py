@@ -65,7 +65,7 @@ logger = structlog.get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application startup and shutdown lifecycle handler."""
-    logger.info("cart_service_starting", port=8003)
+    logger.info("cart_service_starting", port=int(os.getenv("PORT", 8000)))
 
     # 1. Load secrets
     load_secrets_to_env()

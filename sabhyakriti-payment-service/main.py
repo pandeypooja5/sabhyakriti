@@ -131,7 +131,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.scheduler = scheduler
     logger.info("scheduler_started")
 
-    logger.info("payment_service_ready", port=8005)
+    logger.info("payment_service_ready", port=int(os.getenv("PORT", 8000)))
     yield
 
     # ---- Shutdown ----
