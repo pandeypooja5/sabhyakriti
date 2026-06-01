@@ -64,8 +64,8 @@ const CheckoutPage: React.FC = () => {
         return;
       }
 
-      // Razorpay / UPI
-      const rzpOrder = await createRazorpayOrder(order.id);
+      // Razorpay / UPI — pass the real order total
+      const rzpOrder = await createRazorpayOrder(order.id, order.total);
       const result = await loadRazorpay(rzpOrder, {
         name: user?.name,
         email: user?.email,
