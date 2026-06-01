@@ -200,6 +200,7 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="Payment microservice for the Sabhyakriti Saree eCommerce platform.",
         lifespan=lifespan,
+        redirect_slashes=False,
     )
 
     # --- Middleware (outermost first) ---

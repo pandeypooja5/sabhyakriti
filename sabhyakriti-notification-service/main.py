@@ -128,6 +128,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
+        redirect_slashes=False,
 )
 
 # ── Middleware (applied in reverse registration order) ─────────────────────────
