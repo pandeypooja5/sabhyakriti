@@ -74,16 +74,7 @@ class PaymentModel(Base):
         nullable=False,
     )
 
-    # Relationship back to webhook events
-    webhook_events: Mapped[list[WebhookEventModel]] = relationship(
-        "WebhookEventModel",
-        back_populates="payment",
-        foreign_keys="WebhookEventModel.razorpay_payment_id",
-        primaryjoin=(
-            "PaymentModel.razorpay_payment_id == foreign(WebhookEventModel.razorpay_payment_id)"
-        ),
-        lazy="noload",
-    )
+    # webhook_events relationship removed — use WebhookEventModel.payment (viewonly) instead
 
 
 class WebhookEventModel(Base):
@@ -120,10 +111,9 @@ class WebhookEventModel(Base):
     )
     processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    # Soft relationship back to payment (no FK — events can arrive before payments)
+    # Soft relationship back to payment (viewonly — no FK, events can arrive before payments)
     payment: Mapped[PaymentModel | None] = relationship(
         "PaymentModel",
-        back_populates="webhook_events",
         foreign_keys=[razorpay_payment_id],
         primaryjoin=(
             "WebhookEventModel.razorpay_payment_id == foreign(PaymentModel.razorpay_payment_id)"

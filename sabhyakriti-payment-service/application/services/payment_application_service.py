@@ -98,7 +98,8 @@ class PaymentApplicationService:
                 )
 
         amount_paise = int(amount * 100)
-        receipt = f"order_{order_id}"
+        # Razorpay receipt must be <= 40 chars
+        receipt = f"ord_{str(order_id).replace('-', '')[-32:]}"
 
         log.info("creating_razorpay_order", amount_paise=amount_paise)
         rz_order = await self._razorpay.create_order(amount_paise, receipt)
