@@ -151,7 +151,6 @@ def create_app() -> FastAPI:
         description="Admin BFF — pure aggregation layer for the Sabhyakriti platform.",
         version="0.1.0",
         lifespan=lifespan,
-        redirect_slashes=False,
         docs_url="/api/docs",
         redoc_url="/api/redoc",
         openapi_url="/api/openapi.json",
