@@ -61,11 +61,12 @@ class Settings(BaseSettings):
     aws_region: str = "ap-south-1"
     s3_bucket_name: str = "sabhyakriti-product-images"
     cloudfront_domain: str = "localhost"
-    # Cloudflare R2 (leave blank to fall back to AWS S3 / local dev)
+    # Cloudflare R2 (leave blank to fall back to local disk storage)
     r2_account_id: str = ""
     r2_access_key_id: str = ""
     r2_secret_access_key: str = ""
-    r2_public_domain: str = ""  # e.g. pub-xxxx.r2.dev or your custom domain
+    r2_bucket_name: str = "sabhyakriti-images"
+    r2_public_domain: str = ""  # e.g. https://pub-xxxx.r2.dev
     order_service_internal_url: str = "http://localhost:8001"
     internal_service_secret: str = "dev-secret"
     jwt_public_key_url: str = "http://localhost:8000/internal/v1/auth/jwks.json"
@@ -200,22 +201,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     if settings.r2_account_id and settings.r2_access_key_id:
         r2_endpoint = f"https://{settings.r2_account_id}.r2.cloudflarestorage.com"
         s3_adapter = AWSS3Adapter(
-            bucket_name=settings.s3_bucket_name,
+            bucket_name=settings.r2_bucket_name,
             region="auto",
             endpoint_url=r2_endpoint,
             access_key_id=settings.r2_access_key_id,
             secret_access_key=settings.r2_secret_access_key,
         )
-        # Use R2 public domain as CDN if provided
+        # Point CDN domain at R2 public URL
         if settings.r2_public_domain:
-            settings.cloudfront_domain = settings.r2_public_domain
-        logger.info("storage_backend", backend="cloudflare_r2", endpoint=r2_endpoint)
+            settings.cloudfront_domain = settings.r2_public_domain.rstrip("/")
+        logger.info("storage_backend", backend="cloudflare_r2", bucket=settings.r2_bucket_name)
     else:
         s3_adapter = AWSS3Adapter(
             bucket_name=settings.s3_bucket_name,
             region=settings.aws_region,
         )
-        logger.info("storage_backend", backend="aws_s3")
+        logger.info("storage_backend", backend="local_disk")
 
     # Order service client
     order_client = OrderServiceClient(
