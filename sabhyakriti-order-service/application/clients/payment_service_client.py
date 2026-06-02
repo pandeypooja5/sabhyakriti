@@ -43,11 +43,10 @@ class PaymentServiceClient:
         """Initiate a refund for the given order and return the refund record."""
         async with AsyncClient(base_url=self._base_url, timeout=15.0) as client:
             response = await client.post(
-                "/internal/v1/refunds",
+                f"/internal/v1/payments/{order_id}/refund",
                 json={
                     "order_id": order_id,
                     "amount": str(amount),
-                    "reason": reason,
                 },
                 headers=self._headers(),
             )
