@@ -39,13 +39,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
     >
       {/* Image */}
       <div className="relative overflow-hidden bg-ivory-200 aspect-[3/4]">
-        <Link to={`/sarees/${product.slug}`} data-testid="product-card-link">
+        <Link to={`/sarees/${product.slug}`} data-testid="product-card-link" className="block h-full w-full">
           {primaryImage?.url ? (
             <img
               src={primaryImage.url}
               alt={product.name}
-              className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none select-none"
               loading="lazy"
+              draggable={false}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           ) : (
@@ -54,6 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
               <span className="text-xs text-brand-textMuted font-medium text-center px-2 line-clamp-2">{product.name}</span>
             </div>
           )}
+          {/* Transparent overlay suppresses the browser's image hover toolbar
+              (Edge Visual Search / image menu) while keeping the link clickable */}
+          <span className="absolute inset-0 z-[1]" aria-hidden="true" />
         </Link>
 
         {/* Discount badge */}
@@ -79,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
           data-testid="product-card-wishlist"
           aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           className={cn(
-            'absolute bottom-2 right-2 h-8 w-8 rounded-full flex items-center justify-center shadow transition-all duration-200',
+            'absolute bottom-2 right-2 z-[2] h-8 w-8 rounded-full flex items-center justify-center shadow transition-all duration-200',
             wishlisted
               ? 'bg-burgundy-500 text-white'
               : 'bg-ivory-100 text-brand-textMuted opacity-0 group-hover:opacity-100 hover:text-burgundy-500'
