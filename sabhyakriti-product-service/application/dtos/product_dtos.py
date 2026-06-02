@@ -61,11 +61,13 @@ class ProductSummaryDTO(BaseModel):
     product_id: UUID
     name: str
     slug: str
+    sku: str = ""
     discounted_price: Decimal
     price: Decimal
     discount_percentage: Decimal
     savings_amount: Decimal
     stock_status: StockStatus
+    stock_qty: int = 0
     primary_image_url: str | None
     average_rating: Decimal
     review_count: int
