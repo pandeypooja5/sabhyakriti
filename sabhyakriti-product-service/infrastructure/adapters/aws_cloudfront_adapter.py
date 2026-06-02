@@ -15,6 +15,10 @@ def build_cdn_url(s3_key: str, cloudfront_domain: str) -> str:
     """
     domain = cloudfront_domain.rstrip("/")
     key = s3_key.lstrip("/")
+    # If the domain already includes a scheme (e.g. R2 public domain
+    # "https://pub-xxx.r2.dev"), use it as-is to avoid "https://https://".
+    if domain.startswith(("http://", "https://")):
+        return f"{domain}/{key}"
     # Use http for local development to avoid browser SSL errors
     scheme = "http" if domain.startswith("localhost") else "https"
     return f"{scheme}://{domain}/{key}"
