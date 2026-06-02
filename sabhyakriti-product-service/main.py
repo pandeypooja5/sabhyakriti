@@ -268,6 +268,17 @@ def create_app() -> FastAPI:
     )
     app.state.settings = settings
 
+    # Strip trailing slash from API paths so /products/ and /products both route
+    # the same (Vercel proxy appends a slash on bare collection paths).
+    @app.middleware("http")
+    async def _strip_trailing_slash(request, call_next):  # type: ignore[no-untyped-def]
+        scope = request.scope
+        path = scope.get("path", "")
+        if len(path) > 1 and path.endswith("/"):
+            scope["path"] = path.rstrip("/")
+            scope["raw_path"] = scope["path"].encode()
+        return await call_next(request)
+
     # Middleware (outermost first)
     app.add_middleware(GlobalExceptionHandlerMiddleware)
     app.add_middleware(SecurityHeadersMiddleware)

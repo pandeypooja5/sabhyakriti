@@ -159,6 +159,14 @@ def create_app() -> FastAPI:
 
     # CORS — only allow admin frontend origin
     frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+    @application.middleware("http")
+    async def _strip_trailing_slash(request, call_next):  # type: ignore[no-untyped-def]
+        _p = request.scope.get("path", "")
+        if len(_p) > 1 and _p.endswith("/"):
+            request.scope["path"] = _p.rstrip("/")
+            request.scope["raw_path"] = request.scope["path"].encode()
+        return await call_next(request)
+
     application.add_middleware(
         CORSMiddleware,
         allow_origins=[frontend_origin],

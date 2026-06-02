@@ -230,6 +230,14 @@ def create_app() -> FastAPI:
     )
 
     # CORS
+    @app.middleware("http")
+    async def _strip_trailing_slash(request, call_next):  # type: ignore[no-untyped-def]
+        _p = request.scope.get("path", "")
+        if len(_p) > 1 and _p.endswith("/"):
+            request.scope["path"] = _p.rstrip("/")
+            request.scope["raw_path"] = request.scope["path"].encode()
+        return await call_next(request)
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.allowed_origins.split(","),
