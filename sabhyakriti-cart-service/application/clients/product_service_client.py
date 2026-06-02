@@ -22,7 +22,7 @@ from tenacity import (
 
 logger = logging.getLogger(__name__)
 
-_TIMEOUT_SECONDS = 2.0
+_TIMEOUT_SECONDS = 10.0
 _BATCH_PATH = "/internal/v1/products/batch"
 
 
