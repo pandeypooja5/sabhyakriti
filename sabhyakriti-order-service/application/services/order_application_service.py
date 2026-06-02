@@ -356,19 +356,22 @@ class OrderApplicationService:
                 item.product_id, item.variant_id, item.quantity
             )
 
-        # Refund only for paid orders
+        # Refund only for paid orders; never let a refund failure block the cancel
         if order.is_paid:
-            await self._payment_client.initiate_refund(
-                order_id=str(order_id),
-                amount=order.total_amount,
-                reason="order_cancelled",
-            )
+            try:
+                await self._payment_client.initiate_refund(
+                    order_id=str(order_id),
+                    amount=order.total_amount,
+                    reason="order_cancelled",
+                )
+            except Exception as exc:
+                logger.error("refund_failed_during_cancel", order_id=str(order_id), error=str(exc))
         else:
-            # COD: cancel any pending payment record (no money to refund)
+            # PENDING/COD: cancel any pending payment record (no money to refund)
             try:
                 await self._payment_client.cancel_pending_payment(str(order_id))
             except Exception:
-                pass  # COD cancellations may not have a payment record
+                pass  # may not have a payment record
 
         self._notification_client.notify_order_cancelled(
             user_id=user_id,

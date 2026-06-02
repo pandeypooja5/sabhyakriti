@@ -75,5 +75,16 @@ class Order:
 
     @property
     def is_paid(self) -> bool:
-        """True when payment method is not COD."""
-        return self.payment_method != PaymentMethod.COD
+        """True only when a non-COD payment has actually been captured.
+
+        A PENDING Razorpay order that was never paid has no payment_reference
+        and must NOT be treated as paid (otherwise cancel tries to refund a
+        non-existent payment).
+        """
+        if self.payment_method == PaymentMethod.COD:
+            return False
+        # Razorpay/UPI: paid only once captured (reference set & out of PENDING)
+        return (
+            self.payment_reference is not None
+            and self.status != OrderStatus.PENDING
+        )
