@@ -29,6 +29,6 @@
     { "source": "/api/v1/admin", "destination": "https://admin-service-production-e7f1.up.railway.app/api/v1/admin" },
     { "source": "/api/v1/admin/:path*", "destination": "https://admin-service-production-e7f1.up.railway.app/api/v1/admin/:path*" },
 
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/:path((?!api/).*)", "destination": "/index.html" }
   ]
 }
