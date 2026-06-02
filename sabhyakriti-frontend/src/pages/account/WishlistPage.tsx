@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/store/store';
 import ProductCard from '@/components/product/ProductCard';
 import EmptyState from '@/components/shared/EmptyState';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import Breadcrumb from '@/components/shared/Breadcrumb';
 import toast from 'react-hot-toast';
 
 const WishlistPage: React.FC = () => {
@@ -34,12 +35,13 @@ const WishlistPage: React.FC = () => {
   if (loading) return <div className="flex justify-center py-12"><LoadingSpinner /></div>;
 
   return (
-    <div data-testid="wishlist-page">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-bold text-gray-900 flex items-center gap-2">
-          <Heart className="h-5 w-5 text-saffron-500" /> My Wishlist
-          {items.length > 0 && <span className="text-sm font-normal text-gray-500">({items.length} items)</span>}
-        </h2>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6" data-testid="wishlist-page">
+      <Breadcrumb items={[{ label: 'My Wishlist' }]} />
+      <div className="flex items-center justify-between mt-4 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <Heart className="h-6 w-6 text-saffron-500" /> My Wishlist
+          {items.length > 0 && <span className="text-base font-normal text-gray-500">({items.length} items)</span>}
+        </h1>
         {items.length > 0 && (
           <button
             onClick={() => { dispatch(clearWishlist()); setItems([]); }}

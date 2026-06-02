@@ -13,8 +13,8 @@ const initialState: WishlistState = {
 
 export const fetchWishlist = createAsyncThunk('wishlist/fetch', async (_, { rejectWithValue }) => {
   try {
-    const items = await wishlistService.getWishlist();
-    return items.map((item) => item.productId);
+    const wishlistItems = await wishlistService.getWishlist();
+    return wishlistItems.map((i) => i.productId);
   } catch (err: unknown) {
     const error = err as { response?: { data?: { message?: string } } };
     return rejectWithValue(error.response?.data?.message ?? 'Failed to fetch wishlist');
