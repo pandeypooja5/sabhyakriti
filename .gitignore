@@ -21,3 +21,4 @@ sabhyakriti-product-service/uploads/prod/*
 .DS_Store
 *.swp
 *.swo
+.vercel
