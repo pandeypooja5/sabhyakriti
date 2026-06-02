@@ -11,7 +11,7 @@ function normalizeWishlistItem(raw: any): WishlistItem {
     product: {
       id: String(raw.product_id ?? ''),
       name: String(raw.product_name ?? raw.name ?? ''),
-      slug: String(raw.slug ?? ''),
+      slug: String(raw.slug ?? raw.product_slug ?? ''),
       sku: '',
       description: '',
       price: Number(raw.discounted_price ?? 0),

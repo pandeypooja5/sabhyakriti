@@ -32,6 +32,7 @@ class ProductPriceDTO:
 
     product_id: UUID
     name: str
+    slug: str
     primary_image_url: str | None
     discounted_price: Decimal
     stock_status: str  # "IN_STOCK" | "OUT_OF_STOCK" | "LIMITED"
@@ -88,6 +89,7 @@ class ProductServiceClient:
                     UUID(str(item["product_id"])): ProductPriceDTO(
                         product_id=UUID(str(item["product_id"])),
                         name=str(item["name"]),
+                        slug=str(item.get("slug", "")),
                         primary_image_url=(
                             str(item["primary_image_url"])
                             if item.get("primary_image_url")

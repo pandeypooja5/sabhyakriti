@@ -31,6 +31,7 @@ class ProductBatchItem(BaseModel):
     """Product info returned in batch."""
     product_id: str
     name: str
+    slug: str = ""
     primary_image_url: str | None
     discounted_price: float
     stock_status: str
@@ -87,6 +88,7 @@ async def get_products_batch(
         ProductBatchItem(
             product_id=str(p.product_id),
             name=p.name,
+            slug=p.slug,
             primary_image_url=(p.primary_image.cloudfront_url if p.primary_image else None),
             discounted_price=float(p.discounted_price),
             stock_status=(

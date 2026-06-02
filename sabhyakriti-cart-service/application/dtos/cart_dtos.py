@@ -79,6 +79,7 @@ class WishlistItemDTO(_BaseDTO):
     wishlist_item_id: UUID
     product_id: UUID
     product_name: str
+    slug: str = ""
     primary_image_url: str | None = None
     discounted_price: Decimal
     stock_status: str

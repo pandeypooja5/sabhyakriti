@@ -223,6 +223,9 @@ class CartApplicationService:
                 product_name=product_map[item.product_id].name
                 if item.product_id in product_map
                 else "Unknown Product",
+                slug=product_map[item.product_id].slug
+                if item.product_id in product_map
+                else "",
                 primary_image_url=product_map[item.product_id].primary_image_url
                 if item.product_id in product_map
                 else None,
