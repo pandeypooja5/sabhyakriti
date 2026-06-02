@@ -132,14 +132,29 @@ export const confirmImageUpload = async (productId: string, s3Key: string, isPri
   await apiClient.post(`/products/${productId}/images/confirm`, { s3_key: s3Key, is_primary: isPrimary, sort_order: sortOrder });
 };
 
+/**
+ * Backend stores `price` (= MRP) + `discount_percentage`, and derives
+ * discounted (selling) price = price * (1 - discount/100).
+ * The admin form captures MRP and Selling Price, so we convert the pair
+ * into the discount percentage the backend expects.
+ */
+function calcDiscountPct(mrp: number, sellingPrice: number): number {
+  if (!mrp || mrp <= 0) return 0;
+  if (!sellingPrice || sellingPrice >= mrp) return 0; // no discount (or invalid)
+  const pct = ((mrp - sellingPrice) / mrp) * 100;
+  return Math.round(pct * 100) / 100; // 2-decimal precision
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toProductPayload(data: Partial<Product> & Record<string, any>) {
+  const mrp = Number(data.mrp ?? data.price ?? 0);
+  const sellingPrice = Number(data.price ?? data.mrp ?? 0);
   return {
     name: data.name,
     sku: data.sku,
     description: data.description ?? '',
-    price: data.mrp ?? data.price ?? 0,
-    discount_percentage: data.discountPercent ?? 0,
+    price: mrp,
+    discount_percentage: calcDiscountPct(mrp, sellingPrice),
     stock_qty: data.stockQuantity ?? 0,
     is_active: data.isActive ?? true,
     category_ids: [
@@ -161,8 +176,13 @@ export const updateProduct = async (id: string, data: Partial<Product>): Promise
   if (data.description !== undefined) payload.description = data.description;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const d = data as any;
-  if (d.mrp !== undefined) payload.price = d.mrp;
-  if (d.discountPercent !== undefined) payload.discount_percentage = d.discountPercent;
+  // MRP -> backend price; Selling Price -> derived discount_percentage
+  if (d.mrp !== undefined || d.price !== undefined) {
+    const mrp = Number(d.mrp ?? d.price ?? 0);
+    const sellingPrice = Number(d.price ?? d.mrp ?? 0);
+    payload.price = mrp;
+    payload.discount_percentage = calcDiscountPct(mrp, sellingPrice);
+  }
   if (d.stockQuantity !== undefined) payload.stock_qty = d.stockQuantity;
   if (data.isActive !== undefined) payload.is_active = data.isActive;
   const catIds = [

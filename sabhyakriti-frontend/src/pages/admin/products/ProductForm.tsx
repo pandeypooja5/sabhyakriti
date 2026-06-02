@@ -121,6 +121,12 @@ const ProductForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.sku.trim()) { toast.error('Name and SKU are required'); return; }
+    const mrpNum = Number(form.mrp);
+    const priceNum = Number(form.price);
+    if (priceNum > mrpNum) {
+      toast.error('Selling Price cannot be greater than MRP');
+      return;
+    }
     setSaving(true);
     try {
       const data = {
