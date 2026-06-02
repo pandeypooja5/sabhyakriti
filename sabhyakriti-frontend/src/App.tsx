@@ -38,6 +38,7 @@ import OrderDetailPage from '@/pages/orders/OrderDetailPage';
 
 // Account
 import AccountPage from '@/pages/account/AccountPage';
+import WishlistPage from '@/pages/account/WishlistPage';
 
 // Admin
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -96,7 +97,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'account/wishlist',
-        element: <ProtectedRoute><AccountPage /></ProtectedRoute>,
+        element: <ProtectedRoute><WishlistPage /></ProtectedRoute>,
       },
     ],
   },
