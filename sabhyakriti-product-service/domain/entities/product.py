@@ -41,6 +41,12 @@ class Product:
     review_count: int
     created_at: datetime
     updated_at: datetime
+    fabric: str | None = None
+    color: str | None = None
+    work: str | None = None
+    saree_length: Decimal | None = None
+    blouse_length: Decimal | None = None
+    blouse_included: bool = False
     images: list[ProductImage] = field(default_factory=list)
     category_ids: list[UUID] = field(default_factory=list)
 

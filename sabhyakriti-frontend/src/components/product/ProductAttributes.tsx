@@ -47,12 +47,11 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({ product }) => {
       <AccordionItem title="Product Details" defaultOpen>
         <div className="space-y-0.5">
           <AttributeRow label="Fabric" value={product.fabric} />
-          <AttributeRow label="Color" value={product.color} />
+          <AttributeRow label="Colour" value={product.color} />
+          <AttributeRow label="Work" value={product.weaveType} />
+          {product.length ? <AttributeRow label="Saree Length" value={`${product.length} meters`} /> : null}
+          {product.blouseLength ? <AttributeRow label="Blouse Length" value={`${product.blouseLength} meters`} /> : null}
           <AttributeRow label="Blouse Included" value={product.blouseIncluded} />
-          {product.length && <AttributeRow label="Length" value={`${product.length} meters`} />}
-          {product.blouseLength && <AttributeRow label="Blouse Length" value={`${product.blouseLength} meters`} />}
-          <AttributeRow label="Material" value={product.material} />
-          <AttributeRow label="Weave Type" value={product.weaveType} />
         </div>
       </AccordionItem>
 

@@ -80,6 +80,13 @@ class ProductModel(Base):
     )
     stock_qty: Mapped[int] = mapped_column(sa.Integer, nullable=False, default=0)
     is_active: Mapped[bool] = mapped_column(sa.Boolean, nullable=False, default=True)
+    # Product attributes
+    fabric: Mapped[Optional[str]] = mapped_column(sa.String(100), nullable=True)
+    color: Mapped[Optional[str]] = mapped_column(sa.String(100), nullable=True)
+    work: Mapped[Optional[str]] = mapped_column(sa.String(150), nullable=True)
+    saree_length: Mapped[Optional[Decimal]] = mapped_column(sa.Numeric(5, 2), nullable=True)
+    blouse_length: Mapped[Optional[Decimal]] = mapped_column(sa.Numeric(5, 2), nullable=True)
+    blouse_included: Mapped[bool] = mapped_column(sa.Boolean, nullable=False, default=False)
     average_rating: Mapped[Decimal] = mapped_column(
         sa.Numeric(3, 2), nullable=False, default=Decimal("0.00")
     )

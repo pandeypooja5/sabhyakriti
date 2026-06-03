@@ -210,26 +210,22 @@ const ProductForm: React.FC = () => {
         <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
           <h2 className="font-semibold text-gray-800">Product Attributes</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[['fabric', 'Fabric'], ['color', 'Color'], ['material', 'Material'], ['weaveType', 'Weave Type']].map(([k, l]) => (
+            {[['fabric', 'Fabric'], ['color', 'Colour'], ['weaveType', 'Work']].map(([k, l]) => (
               <div key={k}>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">{l}</label>
                 <input value={(form as Record<string, string>)[k]} onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))} className="input-field" />
               </div>
             ))}
-            {[['length', 'Length (m)'], ['blouseLength', 'Blouse Length (m)']].map(([k, l]) => (
+            {[['length', 'Saree Length (m)'], ['blouseLength', 'Blouse Length (m)']].map(([k, l]) => (
               <div key={k}>
                 <label className="text-sm font-medium text-gray-700 mb-1 block">{l}</label>
                 <input type="number" step="0.1" value={(form as Record<string, string>)[k]} onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))} className="input-field" />
               </div>
             ))}
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer sm:col-span-2">
               <input type="checkbox" checked={form.blouseIncluded} onChange={(e) => setForm((f) => ({ ...f, blouseIncluded: e.target.checked }))} className="h-4 w-4 text-saffron-500 rounded" />
               <span className="text-sm font-medium text-gray-700">Blouse Included</span>
             </label>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">Care Instructions</label>
-            <textarea value={form.careInstructions} onChange={(e) => setForm((f) => ({ ...f, careInstructions: e.target.value }))} rows={2} className="input-field resize-none" />
           </div>
         </div>
 

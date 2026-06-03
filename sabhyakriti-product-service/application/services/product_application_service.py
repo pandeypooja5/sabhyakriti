@@ -198,6 +198,12 @@ class ProductApplicationService:
             savings_amount=product.savings_amount,
             stock_qty=product.stock_qty,
             stock_status=product.stock_status,
+            fabric=product.fabric,
+            color=product.color,
+            work=product.work,
+            saree_length=product.saree_length,
+            blouse_length=product.blouse_length,
+            blouse_included=product.blouse_included,
             average_rating=product.average_rating,
             review_count=product.review_count,
             is_active=product.is_active,
@@ -315,6 +321,12 @@ class ProductApplicationService:
             discount_percentage=request.discount_percentage,
             stock_qty=request.stock_qty,
             is_active=True,
+            fabric=request.fabric,
+            color=request.color,
+            work=request.work,
+            saree_length=request.saree_length,
+            blouse_length=request.blouse_length,
+            blouse_included=request.blouse_included,
             average_rating=Decimal("0.00"),
             review_count=0,
             created_at=now,
@@ -343,6 +355,18 @@ class ProductApplicationService:
             updates["discount_percentage"] = request.discount_percentage
         if request.stock_qty is not None:
             updates["stock_qty"] = request.stock_qty
+        if request.fabric is not None:
+            updates["fabric"] = request.fabric
+        if request.color is not None:
+            updates["color"] = request.color
+        if request.work is not None:
+            updates["work"] = request.work
+        if request.saree_length is not None:
+            updates["saree_length"] = request.saree_length
+        if request.blouse_length is not None:
+            updates["blouse_length"] = request.blouse_length
+        if request.blouse_included is not None:
+            updates["blouse_included"] = request.blouse_included
         if request.category_ids is not None:
             updates["category_ids"] = request.category_ids
         if request.is_active is not None:

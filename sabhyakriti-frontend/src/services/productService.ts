@@ -47,6 +47,10 @@ export function normalizeProduct(raw: Record<string, any>): Product {
     stockQuantity: Number(raw.stock_qty ?? raw.stockQuantity ?? 0),
     images: rawImages.map(normalizeImage),
     fabric: String(raw.fabric ?? raw.fabric_description ?? ''),
+    color: String(raw.color ?? ''),
+    weaveType: String(raw.work ?? raw.weave_type ?? raw.weaveType ?? ''),
+    length: raw.saree_length != null ? Number(raw.saree_length) : (raw.length != null ? Number(raw.length) : undefined),
+    blouseLength: raw.blouse_length != null ? Number(raw.blouse_length) : (raw.blouseLength != null ? Number(raw.blouseLength) : undefined),
     blouseIncluded: Boolean(raw.blouse_included ?? raw.blouseIncluded ?? false),
     careInstructions: String(raw.care_instructions ?? raw.careInstructions ?? ''),
     fabricCategories: [],
@@ -157,6 +161,12 @@ function toProductPayload(data: Partial<Product> & Record<string, any>) {
     discount_percentage: calcDiscountPct(mrp, sellingPrice),
     stock_qty: data.stockQuantity ?? 0,
     is_active: data.isActive ?? true,
+    fabric: data.fabric || null,
+    color: data.color || null,
+    work: data.weaveType || null,
+    saree_length: data.length ? Number(data.length) : null,
+    blouse_length: data.blouseLength ? Number(data.blouseLength) : null,
+    blouse_included: Boolean(data.blouseIncluded),
     category_ids: [
       ...(data.fabricCategoryIds ?? []),
       ...(data.occasionCategoryIds ?? []),
@@ -185,6 +195,13 @@ export const updateProduct = async (id: string, data: Partial<Product>): Promise
   }
   if (d.stockQuantity !== undefined) payload.stock_qty = d.stockQuantity;
   if (data.isActive !== undefined) payload.is_active = data.isActive;
+  // Attributes (form uses weaveType for Work, length for saree length)
+  if (d.fabric !== undefined) payload.fabric = d.fabric || null;
+  if (d.color !== undefined) payload.color = d.color || null;
+  if (d.weaveType !== undefined) payload.work = d.weaveType || null;
+  if (d.length !== undefined) payload.saree_length = d.length ? Number(d.length) : null;
+  if (d.blouseLength !== undefined) payload.blouse_length = d.blouseLength ? Number(d.blouseLength) : null;
+  if (d.blouseIncluded !== undefined) payload.blouse_included = Boolean(d.blouseIncluded);
   const catIds = [
     ...(d.fabricCategoryIds ?? []),
     ...(d.occasionCategoryIds ?? []),

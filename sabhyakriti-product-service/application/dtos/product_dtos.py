@@ -87,6 +87,12 @@ class ProductDetailDTO(BaseModel):
     savings_amount: Decimal
     stock_qty: int
     stock_status: StockStatus
+    fabric: str | None = None
+    color: str | None = None
+    work: str | None = None
+    saree_length: Decimal | None = None
+    blouse_length: Decimal | None = None
+    blouse_included: bool = False
     average_rating: Decimal
     review_count: int
     is_active: bool
@@ -139,6 +145,12 @@ class CreateProductRequest(BaseModel):
         Decimal, Field(ge=Decimal("0"), le=Decimal("100"))
     ] = Decimal("0")
     stock_qty: Annotated[int, Field(ge=0)] = 0
+    fabric: str | None = None
+    color: str | None = None
+    work: str | None = None
+    saree_length: Decimal | None = None
+    blouse_length: Decimal | None = None
+    blouse_included: bool = False
     category_ids: list[UUID] = Field(default_factory=list)
 
 
@@ -150,6 +162,12 @@ class UpdateProductRequest(BaseModel):
         Decimal, Field(ge=Decimal("0"), le=Decimal("100"))
     ] | None = None
     stock_qty: Annotated[int, Field(ge=0)] | None = None
+    fabric: str | None = None
+    color: str | None = None
+    work: str | None = None
+    saree_length: Decimal | None = None
+    blouse_length: Decimal | None = None
+    blouse_included: bool | None = None
     category_ids: list[UUID] | None = None
     is_active: bool | None = None
 
