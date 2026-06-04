@@ -45,14 +45,30 @@ def _build_product_service(
 # ---------------------------------------------------------------------------
 
 
+def _parse_uuid_csv(raw: str | None) -> list[UUID] | None:
+    """Parse a comma-separated list of UUIDs (or repeated/[]-style values)."""
+    if not raw:
+        return None
+    result: list[UUID] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            result.append(UUID(part))
+        except ValueError:
+            continue
+    return result or None
+
+
 @router.get("", response_model=PagedProductListDTO, summary="List products (PLP)")
 async def list_products(
     request: Request,
     write_db: Annotated[AsyncSession, Depends(get_write_db)],
     read_db: Annotated[AsyncSession, Depends(get_read_db)],
-    fabric_ids: Annotated[list[UUID] | None, Query(alias="fabric_ids[]")] = None,
-    occasion_ids: Annotated[list[UUID] | None, Query(alias="occasion_ids[]")] = None,
-    region_ids: Annotated[list[UUID] | None, Query(alias="region_ids[]")] = None,
+    fabric_ids: str | None = None,
+    occasion_ids: str | None = None,
+    region_ids: str | None = None,
     search: str | None = None,
     sort: SortOrder = SortOrder.NEWEST,
     page: Annotated[int, Query(ge=1)] = 1,
@@ -60,9 +76,9 @@ async def list_products(
 ) -> PagedProductListDTO:
     svc = _build_product_service(request, write_db, read_db)
     return await svc.list_products(
-        fabric_ids=fabric_ids,
-        occasion_ids=occasion_ids,
-        region_ids=region_ids,
+        fabric_ids=_parse_uuid_csv(fabric_ids),
+        occasion_ids=_parse_uuid_csv(occasion_ids),
+        region_ids=_parse_uuid_csv(region_ids),
         search=search,
         sort=sort,
         page=page,
