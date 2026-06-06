@@ -68,8 +68,14 @@ apiClient.interceptors.response.use(
         if (!raw) throw new Error('No refresh token');
         const { refreshToken } = JSON.parse(raw) as AuthTokens;
 
-        const response = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
-        const newTokens: AuthTokens = response.data.tokens ?? response.data;
+        // Backend expects snake_case body and returns snake_case tokens
+        const response = await axios.post(`${BASE_URL}/auth/refresh`, { refresh_token: refreshToken });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const rawTokens = (response.data.tokens ?? response.data) as any;
+        const newTokens: AuthTokens = {
+          accessToken: rawTokens.access_token ?? rawTokens.accessToken ?? '',
+          refreshToken: rawTokens.refresh_token ?? rawTokens.refreshToken ?? refreshToken,
+        };
 
         localStorage.setItem('auth_tokens', JSON.stringify(newTokens));
         apiClient.defaults.headers.common.Authorization = `Bearer ${newTokens.accessToken}`;
