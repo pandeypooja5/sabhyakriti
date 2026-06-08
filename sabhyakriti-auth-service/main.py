@@ -22,6 +22,7 @@ from infrastructure.adapters.google_oauth_adapter import GoogleOAuthAdapter
 from infrastructure.adapters.hibp_adapter import HIBPAdapter
 from infrastructure.adapters.twilio_sms_adapter import TwilioSMSAdapter
 from infrastructure.adapters.twofactor_sms_adapter import TwoFactorSMSAdapter
+from infrastructure.adapters.msg91_sms_adapter import MSG91SMSAdapter
 from infrastructure.cache.redis_client import create_redis_client
 from infrastructure.cache.redis_otp_repository import RedisOTPRepository
 from infrastructure.cache.redis_replay_cache import RedisReplayCache
@@ -84,6 +85,12 @@ class Settings(BaseSettings):
     # Delivery is gated on the key being present, independent of ENVIRONMENT.
     twofactor_api_key: str = ""
     twofactor_template_name: str = ""
+
+    # MSG91 (India SMS OTP) — highest priority when configured. SMS-only route
+    # (no voice fallback). Delivery gated on auth key + template id, not ENVIRONMENT.
+    msg91_auth_key: str = ""
+    msg91_template_id: str = ""
+    msg91_sender_id: str = ""
 
     # OAuth
     google_client_id: str = ""
@@ -170,10 +177,18 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     # ── External adapters ─────────────────────────────────────────────────────
     hibp_adapter = HIBPAdapter()
-    # Prefer 2Factor.in (India OTP) when a real API key is configured; this
-    # sends real SMS regardless of ENVIRONMENT. Otherwise fall back to the
-    # Twilio adapter (which only logs the OTP in development).
-    if settings.twofactor_api_key and not settings.twofactor_api_key.lower().startswith("dummy"):
+    # SMS provider priority (all send real SMS regardless of ENVIRONMENT):
+    #   1. MSG91   — SMS-only OTP route (no voice fallback)
+    #   2. 2Factor — India OTP
+    #   3. Twilio  — fallback; only logs the OTP in development
+    if settings.msg91_auth_key and not settings.msg91_auth_key.lower().startswith("dummy") and settings.msg91_template_id:
+        sms_adapter = MSG91SMSAdapter(
+            auth_key=settings.msg91_auth_key,
+            template_id=settings.msg91_template_id,
+            sender_id=settings.msg91_sender_id,
+        )
+        log.info("sms_provider_selected", provider="msg91")
+    elif settings.twofactor_api_key and not settings.twofactor_api_key.lower().startswith("dummy"):
         sms_adapter = TwoFactorSMSAdapter(
             api_key=settings.twofactor_api_key,
             template_name=settings.twofactor_template_name,
