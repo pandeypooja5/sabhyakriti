@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, Smartphone } from 'lucide-react';
+import { Mail, Lock, PhoneCall } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { loginWithEmail, loginWithOTP } from '@/store/slices/authSlice';
 import { sendOTP } from '@/services/authService';
@@ -46,9 +46,9 @@ const LoginPage: React.FC = () => {
     try {
       await sendOTP(phone);
       setOtpSent(true);
-      toast.success('OTP sent successfully');
+      toast.success('You will receive an automated call with your OTP');
     } catch {
-      toast.error('Failed to send OTP');
+      toast.error('Failed to place the OTP call');
     } finally {
       setSendingOtp(false);
     }
@@ -112,8 +112,8 @@ const LoginPage: React.FC = () => {
                 tab === t ? 'bg-white text-saffron-600 shadow-sm' : 'text-gray-600'
               )}
             >
-              {t === 'email' ? <Mail className="h-3.5 w-3.5" /> : <Smartphone className="h-3.5 w-3.5" />}
-              {t === 'email' ? 'Email' : 'Phone OTP'}
+              {t === 'email' ? <Mail className="h-3.5 w-3.5" /> : <PhoneCall className="h-3.5 w-3.5" />}
+              {t === 'email' ? 'Email' : 'Phone Call'}
             </button>
           ))}
         </div>
@@ -190,18 +190,22 @@ const LoginPage: React.FC = () => {
                   data-testid="send-otp-btn"
                   className="px-3 py-2 bg-teal-700 text-white text-sm font-medium rounded-lg disabled:opacity-50 whitespace-nowrap"
                 >
-                  {sendingOtp ? '...' : otpSent ? 'Sent' : 'Send OTP'}
+                  {sendingOtp ? 'Calling...' : otpSent ? 'Called' : 'Call Me with OTP'}
                 </button>
               </div>
+              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                <PhoneCall className="h-3 w-3" />
+                You&apos;ll get an automated phone call that reads out your verification code.
+              </p>
             </div>
             {otpSent && (
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Enter OTP</label>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">Enter code from the call</label>
                 <input
                   type="text"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="6-digit OTP"
+                  placeholder="6-digit code"
                   data-testid="otp-input"
                   className="input-field text-center text-xl tracking-widest"
                   maxLength={6}
