@@ -21,6 +21,7 @@ from infrastructure.adapters.facebook_oauth_adapter import FacebookOAuthAdapter
 from infrastructure.adapters.google_oauth_adapter import GoogleOAuthAdapter
 from infrastructure.adapters.hibp_adapter import HIBPAdapter
 from infrastructure.adapters.twilio_sms_adapter import TwilioSMSAdapter
+from infrastructure.adapters.twofactor_sms_adapter import TwoFactorSMSAdapter
 from infrastructure.cache.redis_client import create_redis_client
 from infrastructure.cache.redis_otp_repository import RedisOTPRepository
 from infrastructure.cache.redis_replay_cache import RedisReplayCache
@@ -78,6 +79,11 @@ class Settings(BaseSettings):
     twilio_auth_token: str = ""
     twilio_from_number: str = ""
     twilio_secrets_manager_key: str = ""
+
+    # 2Factor.in (India SMS OTP) — preferred when a real api key is set.
+    # Delivery is gated on the key being present, independent of ENVIRONMENT.
+    twofactor_api_key: str = ""
+    twofactor_template_name: str = ""
 
     # OAuth
     google_client_id: str = ""
@@ -164,11 +170,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     # ── External adapters ─────────────────────────────────────────────────────
     hibp_adapter = HIBPAdapter()
-    sms_adapter = TwilioSMSAdapter(
-        account_sid=twilio_account_sid,
-        auth_token=twilio_auth_token,
-        from_number=settings.twilio_from_number,
-    )
+    # Prefer 2Factor.in (India OTP) when a real API key is configured; this
+    # sends real SMS regardless of ENVIRONMENT. Otherwise fall back to the
+    # Twilio adapter (which only logs the OTP in development).
+    if settings.twofactor_api_key and not settings.twofactor_api_key.lower().startswith("dummy"):
+        sms_adapter = TwoFactorSMSAdapter(
+            api_key=settings.twofactor_api_key,
+            template_name=settings.twofactor_template_name,
+        )
+        log.info("sms_provider_selected", provider="2factor")
+    else:
+        sms_adapter = TwilioSMSAdapter(
+            account_sid=twilio_account_sid,
+            auth_token=twilio_auth_token,
+            from_number=settings.twilio_from_number,
+        )
+        log.info("sms_provider_selected", provider="twilio")
     email_adapter = AWSSESAdapter(
         from_address=settings.ses_from_address,
         region=settings.aws_region,
