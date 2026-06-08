@@ -31,12 +31,28 @@ class OrderServiceClient:
         wait=wait_exponential(multiplier=1, min=1, max=10),
         reraise=True,
     )
-    async def confirm_order(self, order_id: UUID) -> None:
-        """Notify the Order Service that a payment was captured successfully."""
-        url = f"{self._base_url}/internal/v1/orders/{order_id}/confirm-payment"
+    async def confirm_order(
+        self,
+        order_id: UUID,
+        payment_reference: str,
+        payment_method: str = "RAZORPAY",
+    ) -> None:
+        """Notify the Order Service that a payment was captured successfully.
+
+        Calls the order service ``/confirm`` endpoint which transitions the
+        order PENDING -> CONFIRMED and records the payment reference.
+        """
+        url = f"{self._base_url}/internal/v1/orders/{order_id}/confirm"
         log = logger.bind(order_id=str(order_id))
         async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(url, headers=self._headers)
+            response = await client.post(
+                url,
+                headers=self._headers,
+                json={
+                    "payment_reference": payment_reference,
+                    "payment_method": payment_method,
+                },
+            )
             response.raise_for_status()
         log.info("order_confirmed")
 

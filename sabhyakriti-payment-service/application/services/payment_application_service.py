@@ -185,7 +185,11 @@ class PaymentApplicationService:
         log.info("payment_captured", razorpay_payment_id=req.razorpay_payment_id)
 
         # Notify order service
-        await self._order_client.confirm_order(req.order_id)
+        await self._order_client.confirm_order(
+            req.order_id,
+            payment_reference=req.razorpay_payment_id,
+            payment_method="RAZORPAY",
+        )
 
         return self._to_dto(payment)
 
@@ -317,7 +321,11 @@ class PaymentApplicationService:
         payment.updated_at = now
         await self._payment_repo.update(payment)
 
-        await self._order_client.confirm_order(payment.order_id)
+        await self._order_client.confirm_order(
+            payment.order_id,
+            payment_reference=razorpay_payment_id,
+            payment_method="RAZORPAY",
+        )
         log.info("webhook_payment_captured_processed")
 
     async def _handle_payment_failed_webhook(
