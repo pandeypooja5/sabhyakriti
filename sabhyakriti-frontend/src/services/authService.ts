@@ -85,12 +85,15 @@ export const resetPassword = async (token: string, password: string): Promise<{ 
 };
 
 export const changePassword = async (currentPassword: string, newPassword: string): Promise<{ message: string }> => {
-  const res = await apiClient.post('/auth/change-password', { currentPassword, newPassword });
+  const res = await apiClient.post('/users/me/change-password', {
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
   return res.data;
 };
 
 export const getProfile = async (): Promise<User> => {
-  const res = await apiClient.get('/auth/profile');
+  const res = await apiClient.get('/users/me');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const raw = (res.data.user ?? res.data) as Record<string, any>;
   return {
@@ -106,8 +109,12 @@ export const getProfile = async (): Promise<User> => {
 };
 
 export const updateProfile = async (data: Partial<Pick<User, 'name' | 'phone' | 'avatar'>>): Promise<User> => {
-  const res = await apiClient.patch('/auth/profile', data);
-  return res.data.user ?? res.data;
+  const payload: Record<string, unknown> = {};
+  if (data.name !== undefined) payload.full_name = data.name;
+  if (data.avatar !== undefined) payload.profile_picture_url = data.avatar;
+  await apiClient.patch('/users/me', payload);
+  // Re-fetch the normalized profile so callers get a consistent User shape.
+  return getProfile();
 };
 
 export const verifyEmail = async (token: string): Promise<{ message: string }> => {
