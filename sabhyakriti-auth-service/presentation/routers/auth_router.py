@@ -5,6 +5,8 @@ import uuid
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import RedirectResponse
+from urllib.parse import urlencode
 
 from application.dtos.auth_dtos import (
     AuthResponse,
@@ -83,7 +85,7 @@ async def login(request: Request, body: LoginRequest) -> AuthResponse | MFAPendi
 # ── OAuth ─────────────────────────────────────────────────────────────────────
 
 @router.get("/oauth/{provider}/init")
-async def oauth_init(provider: str, request: Request) -> dict:
+async def oauth_init(provider: str, request: Request) -> RedirectResponse:
     provider = provider.upper()
     _validate_provider(provider)
 
@@ -113,38 +115,63 @@ async def oauth_init(provider: str, request: Request) -> dict:
             code_challenge_method="S256",
             scope=_oauth_scope(provider),
         )
-    return {"auth_url": auth_url, "state": state}
+    # Redirect the browser straight to the provider's consent screen.
+    return RedirectResponse(auth_url, status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/oauth/{provider}/callback", response_model=AuthResponse)
+@router.get("/oauth/{provider}/callback")
 async def oauth_callback(
     provider: str,
-    code: str,
     state: str,
     request: Request,
-) -> AuthResponse:
+    code: str | None = None,
+    error: str | None = None,
+) -> RedirectResponse:
+    """Handle the provider redirect, then bounce the browser back to the SPA.
+
+    On success we redirect to ``{frontend}/oauth/callback#access_token=...&refresh_token=...``
+    (tokens in the URL fragment so they never reach server logs). On failure we
+    redirect with ``#error=...`` so the SPA can show a friendly message.
+    """
     provider = provider.upper()
-    _validate_provider(provider)
+    frontend_cb = f"{_public_base_url(request)}/auth/callback"
 
-    redis = request.app.state.redis
-    stored: str | None = await redis.get(f"oauth_state:{state}")
-    if not stored:
-        raise HTTPException(status_code=400, detail="Invalid or expired OAuth state.")
-    await redis.delete(f"oauth_state:{state}")
+    def _fail(reason: str) -> RedirectResponse:
+        return RedirectResponse(f"{frontend_cb}#{urlencode({'error': reason})}", status_code=302)
 
-    stored_provider, code_verifier = stored.split(":", 1)
-    if stored_provider != provider:
-        raise HTTPException(status_code=400, detail="OAuth provider mismatch.")
+    try:
+        _validate_provider(provider)
+        if error or not code:
+            return _fail(error or "no_code")
 
-    adapter = _get_oauth_adapter(request, provider)
-    redirect_uri = _oauth_redirect_uri(request, provider)
-    return await _svc(request).login_with_oauth(
-        provider=provider.lower(),
-        code=code,
-        redirect_uri=redirect_uri,
-        adapter=adapter,
-        code_verifier=code_verifier,
-    )
+        redis = request.app.state.redis
+        stored: str | None = await redis.get(f"oauth_state:{state}")
+        if not stored:
+            return _fail("invalid_state")
+        await redis.delete(f"oauth_state:{state}")
+
+        stored_provider, code_verifier = stored.split(":", 1)
+        if stored_provider != provider:
+            return _fail("provider_mismatch")
+
+        adapter = _get_oauth_adapter(request, provider)
+        redirect_uri = _oauth_redirect_uri(request, provider)
+        auth = await _svc(request).login_with_oauth(
+            provider=provider.lower(),
+            code=code,
+            redirect_uri=redirect_uri,
+            adapter=adapter,
+            code_verifier=code_verifier,
+        )
+    except Exception as exc:  # noqa: BLE001 — never leak a stack trace to the browser
+        log.warning("oauth_callback_failed", provider=provider, error=str(exc))
+        return _fail("oauth_failed")
+
+    fragment = urlencode({
+        "access_token": auth.tokens.access_token,
+        "refresh_token": auth.tokens.refresh_token,
+    })
+    return RedirectResponse(f"{frontend_cb}#{fragment}", status_code=302)
 
 
 # ── OTP ───────────────────────────────────────────────────────────────────────
@@ -204,8 +231,18 @@ def _get_oauth_adapter(request: Request, provider: str):
     return request.app.state.facebook_adapter
 
 
+def _public_base_url(request: Request) -> str:
+    """Public site origin used for OAuth redirect URIs and the SPA bounce-back.
+
+    Must be a stable HTTPS origin (and the redirect URI below must be registered
+    verbatim in the Google console). Falls back to the request origin.
+    """
+    configured = getattr(request.app.state.settings, "public_base_url", "") or ""
+    return configured.rstrip("/") or str(request.base_url).rstrip("/")
+
+
 def _oauth_redirect_uri(request: Request, provider: str) -> str:
-    base = str(request.base_url).rstrip("/")
+    base = _public_base_url(request)
     return f"{base}/api/v1/auth/oauth/{provider.lower()}/callback"
 
 

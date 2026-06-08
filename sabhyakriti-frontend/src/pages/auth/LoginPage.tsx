@@ -64,8 +64,9 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleOAuth = (provider: 'google' | 'facebook') => {
-    window.location.href = `/api/v1/auth/oauth/${provider}`;
+  const handleOAuth = (provider: 'google') => {
+    // Backend /init redirects the browser to the provider consent screen.
+    window.location.href = `/api/v1/auth/oauth/${provider}/init`;
   };
 
   return (
@@ -85,13 +86,6 @@ const LoginPage: React.FC = () => {
           >
             <img src="https://www.google.com/favicon.ico" alt="Google" className="h-4 w-4" />
             Continue with Google
-          </button>
-          <button
-            onClick={() => handleOAuth('facebook')}
-            data-testid="facebook-login-btn"
-            className="w-full flex items-center justify-center gap-3 py-2.5 bg-[#1877F2] text-white rounded-xl hover:bg-[#1666d0] transition-colors text-sm font-medium"
-          >
-            Continue with Facebook
           </button>
         </div>
 

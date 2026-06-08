@@ -91,7 +91,18 @@ export const changePassword = async (currentPassword: string, newPassword: strin
 
 export const getProfile = async (): Promise<User> => {
   const res = await apiClient.get('/auth/profile');
-  return res.data.user ?? res.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const raw = (res.data.user ?? res.data) as Record<string, any>;
+  return {
+    id: String(raw.user_id ?? raw.id ?? ''),
+    email: String(raw.email ?? ''),
+    name: String(raw.full_name ?? raw.name ?? ''),
+    phone: raw.phone_number ?? raw.phone ?? undefined,
+    role: (raw.role ?? 'CUSTOMER') as User['role'],
+    isVerified: Boolean(raw.is_email_verified ?? raw.isVerified ?? false),
+    createdAt: String(raw.created_at ?? raw.createdAt ?? ''),
+    updatedAt: String(raw.updated_at ?? raw.updatedAt ?? ''),
+  };
 };
 
 export const updateProfile = async (data: Partial<Pick<User, 'name' | 'phone' | 'avatar'>>): Promise<User> => {

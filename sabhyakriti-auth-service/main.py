@@ -97,6 +97,8 @@ class Settings(BaseSettings):
     google_client_secret: str = ""
     facebook_client_id: str = ""
     facebook_client_secret: str = ""
+    # Public site origin (HTTPS) used for OAuth redirect URIs + SPA bounce-back.
+    public_base_url: str = "https://www.sabhyakriti.com"
 
 
 # ── Logging ───────────────────────────────────────────────────────────────────
