@@ -54,13 +54,15 @@ export const oauthLogin = async (provider: string, code: string): Promise<AuthRe
 };
 
 export const sendOTP = async (phone: string): Promise<{ message: string }> => {
-  const res = await apiClient.post('/auth/otp/send', { phone });
+  // Backend expects snake_case `phone_number`
+  const res = await apiClient.post('/auth/otp/send', { phone_number: phone });
   return res.data;
 };
 
 export const verifyOTP = async (phone: string, otp: string): Promise<AuthResponse> => {
-  const res = await apiClient.post('/auth/otp/verify', { phone, otp });
-  return res.data;
+  // Backend expects snake_case `phone_number` / `otp_code` and returns snake_case tokens
+  const res = await apiClient.post('/auth/otp/verify', { phone_number: phone, otp_code: otp });
+  return normalizeAuthResponse(res.data);
 };
 
 export const refresh = async (refreshToken: string): Promise<AuthResponse> => {
