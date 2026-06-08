@@ -38,6 +38,26 @@ from domain.value_objects import PaymentMethod, PaymentStatus
 
 logger = structlog.get_logger(__name__)
 
+
+def _derive_webhook_event_id(body: dict) -> str:  # type: ignore[type-arg]
+    """Build a stable idempotency key from a Razorpay webhook body.
+
+    Razorpay webhooks have no top-level ``id``; the preferred key is the
+    ``X-Razorpay-Event-Id`` header. When that's unavailable we derive a unique
+    key from the event type + the entity id inside the payload, e.g.
+    ``payment.captured:pay_XXXX``.
+    """
+    event = str(body.get("event", "")) or "event"
+    payload = body.get("payload") or {}
+    for entity_name in ("payment", "refund", "order"):
+        entity = (payload.get(entity_name) or {}).get("entity") or {}
+        entity_id = entity.get("id")
+        if entity_id:
+            return f"{event}:{entity_id}"
+    created_at = body.get("created_at")
+    return f"{event}:{created_at}" if created_at else ""
+
+
 # Business constants
 MAX_PAYMENT_ATTEMPTS = 3
 PAYMENT_WINDOW_MINUTES = 30
@@ -232,11 +252,16 @@ class PaymentApplicationService:
         self,
         raw_body: bytes,
         signature: str,
+        event_id: str | None = None,
     ) -> None:
         """Validate and idempotently process an incoming Razorpay webhook.
 
         Duplicate events (same ``razorpay_event_id``) are silently ignored
         via a UNIQUE constraint on the webhook_events table.
+
+        Razorpay webhook payloads have NO top-level ``id``; the canonical unique
+        identifier is the ``X-Razorpay-Event-Id`` HTTP header. We use that, and
+        fall back to a key derived from the event type + entity id.
         """
         if not verify_webhook_signature(self._webhook_secret, raw_body, signature):
             raise ValueError("Webhook signature verification failed.")
@@ -244,9 +269,9 @@ class PaymentApplicationService:
         body = json.loads(raw_body)
         event_payload = WebhookEventPayload.model_validate(body)
 
-        razorpay_event_id = body.get("id", "")
+        razorpay_event_id = event_id or _derive_webhook_event_id(body)
         if not razorpay_event_id:
-            raise ValueError("Webhook body missing 'id' field.")
+            raise ValueError("Webhook missing event identifier (no X-Razorpay-Event-Id header or entity id).")
 
         log = logger.bind(razorpay_event_id=razorpay_event_id, event=event_payload.event)
 

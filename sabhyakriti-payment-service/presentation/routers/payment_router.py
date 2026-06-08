@@ -145,6 +145,7 @@ async def razorpay_webhook(
     request: Request,
     service: Annotated[PaymentApplicationService, Depends(get_payment_service)],
     x_razorpay_signature: Annotated[str | None, Header()] = None,
+    x_razorpay_event_id: Annotated[str | None, Header()] = None,
 ) -> dict:  # type: ignore[type-arg]
     """Receive and process Razorpay webhook events.
 
@@ -161,7 +162,7 @@ async def razorpay_webhook(
     raw_body = await request.body()
 
     try:
-        await service.process_webhook(raw_body, x_razorpay_signature)
+        await service.process_webhook(raw_body, x_razorpay_signature, event_id=x_razorpay_event_id)
     except ValueError as exc:
         # Signature failures should return 400 to instruct Razorpay not to retry
         logger.warning("webhook_rejected", error=str(exc))
