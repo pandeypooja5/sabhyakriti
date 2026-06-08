@@ -3,12 +3,20 @@ import { Link } from 'react-router-dom';
 import { Package } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { fetchOrders } from '@/store/slices/orderSlice';
+import { openCancelOrderModal } from '@/store/slices/uiSlice';
 import { formatDate } from '@/utils/date';
 import { formatINR } from '@/utils/currency';
 import EmptyState from '@/components/shared/EmptyState';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import Breadcrumb from '@/components/shared/Breadcrumb';
+import CancelOrderModal from '@/components/order/CancelOrderModal';
 import { cn } from '@/lib/utils';
+
+// Orders can be cancelled until they are shipped. Once an order reaches
+// SHIPPED (or any later/terminal state), cancellation is no longer allowed
+// by the backend (can_cancel only permits PENDING/CONFIRMED), so the button
+// is hidden for those statuses.
+const CANCELLABLE_STATUSES = ['PENDING', 'CONFIRMED'];
 
 const statusColors: Record<string, string> = {
   PENDING: 'bg-amber-100 text-amber-700',
@@ -87,13 +95,24 @@ const OrderHistoryPage: React.FC = () => {
                 )}
               </div>
 
-              <Link
-                to={`/orders/${order.id}`}
-                data-testid="view-order-btn"
-                className="text-sm font-medium text-saffron-500 hover:text-saffron-600"
-              >
-                View Details →
-              </Link>
+              <div className="flex items-center justify-between gap-3">
+                <Link
+                  to={`/orders/${order.id}`}
+                  data-testid="view-order-btn"
+                  className="text-sm font-medium text-saffron-500 hover:text-saffron-600"
+                >
+                  View Details →
+                </Link>
+                {CANCELLABLE_STATUSES.includes(order.status) && (
+                  <button
+                    onClick={() => dispatch(openCancelOrderModal(order.id))}
+                    data-testid="cancel-order-btn"
+                    className="px-3 py-1.5 border border-red-300 text-red-600 text-sm font-medium rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    Cancel Order
+                  </button>
+                )}
+              </div>
             </div>
           ))}
 
@@ -117,6 +136,8 @@ const OrderHistoryPage: React.FC = () => {
           )}
         </div>
       )}
+
+      <CancelOrderModal />
     </div>
   );
 };

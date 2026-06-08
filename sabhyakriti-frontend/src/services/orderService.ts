@@ -157,7 +157,7 @@ export const getOrderDetail = async (orderId: string): Promise<Order> => {
 
 export const cancelOrder = async (orderId: string, reason: string): Promise<Order> => {
   const res = await apiClient.post(`/orders/${orderId}/cancel`, { reason });
-  return res.data.order ?? res.data;
+  return normalizeOrder(res.data.order ?? res.data);
 };
 
 export const submitReturn = async (data: {
