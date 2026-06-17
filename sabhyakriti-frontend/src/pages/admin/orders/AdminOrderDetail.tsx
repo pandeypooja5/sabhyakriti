@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import type { Order, OrderStatus } from '@/types';
-import { getOrderDetail } from '@/services/orderService';
-import { updateOrderStatus } from '@/services/adminService';
+import { getAdminOrderDetail, updateOrderStatus } from '@/services/adminService';
 import { formatDate } from '@/utils/date';
 import { formatINR } from '@/utils/currency';
 import OrderStatusTimeline from '@/components/order/OrderStatusTimeline';
@@ -26,10 +25,12 @@ const AdminOrderDetail: React.FC = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [courierName, setCourierName] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
 
   useEffect(() => {
     if (!orderId) return;
-    getOrderDetail(orderId)
+    getAdminOrderDetail(orderId)
       .then(setOrder)
       .finally(() => setLoading(false));
   }, [orderId]);
@@ -44,6 +45,25 @@ const AdminOrderDetail: React.FC = () => {
       setNewStatus('');
     } catch {
       toast.error('Failed to update status');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    if (!order || !cancelReason.trim()) {
+      toast.error('Please provide a cancellation reason');
+      return;
+    }
+    setUpdating(true);
+    try {
+      const updated = await updateOrderStatus(order.id, 'CANCELLED');
+      setOrder(updated);
+      toast.success('Order cancelled successfully');
+      setShowCancelModal(false);
+      setCancelReason('');
+    } catch {
+      toast.error('Failed to cancel order');
     } finally {
       setUpdating(false);
     }
@@ -65,7 +85,18 @@ const AdminOrderDetail: React.FC = () => {
           <h1 className="text-xl font-bold text-gray-900">Order #{order.orderNumber}</h1>
           <p className="text-sm text-gray-500">Placed {formatDate(order.createdAt)}</p>
         </div>
-        <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">{order.status}</span>
+        <div className="flex items-center gap-3">
+          <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">{order.status}</span>
+          {(order.status === 'PENDING' || order.status === 'CONFIRMED') && (
+            <button
+              onClick={() => setShowCancelModal(true)}
+              className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200"
+              data-testid="cancel-order-btn"
+            >
+              Cancel Order
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -137,6 +168,44 @@ const AdminOrderDetail: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Cancel Order Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" data-testid="cancel-modal">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Cancel Order</h2>
+            <p className="text-sm text-gray-600 mb-4">Are you sure you want to cancel this order? This action cannot be undone.</p>
+            <textarea
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+              placeholder="Cancellation reason (required)"
+              className="input-field w-full h-24 mb-4 resize-none"
+              data-testid="cancel-reason-input"
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => {
+                  setShowCancelModal(false);
+                  setCancelReason('');
+                }}
+                disabled={updating}
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                data-testid="cancel-modal-close"
+              >
+                Keep Order
+              </button>
+              <button
+                onClick={handleCancelOrder}
+                disabled={updating || !cancelReason.trim()}
+                data-testid="confirm-cancel-btn"
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50"
+              >
+                {updating ? 'Cancelling...' : 'Confirm Cancel'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -75,6 +75,11 @@ export const listAllOrders = async (
   };
 };
 
+export const getAdminOrderDetail = async (orderId: string): Promise<Order> => {
+  const res = await apiClient.get(`/admin/orders/${orderId}`);
+  return normalizeOrder(res.data.order ?? res.data);
+};
+
 export const updateOrderStatus = async (
   orderId: string,
   status: OrderStatus,
