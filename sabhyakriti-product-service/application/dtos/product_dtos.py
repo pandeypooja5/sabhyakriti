@@ -93,6 +93,7 @@ class ProductDetailDTO(BaseModel):
     saree_length: Decimal | None = None
     blouse_length: Decimal | None = None
     blouse_included: bool = False
+    care_instructions: str | None = None
     average_rating: Decimal
     review_count: int
     is_active: bool
@@ -151,6 +152,7 @@ class CreateProductRequest(BaseModel):
     saree_length: Decimal | None = None
     blouse_length: Decimal | None = None
     blouse_included: bool = False
+    care_instructions: str | None = None
     category_ids: list[UUID] = Field(default_factory=list)
 
 
@@ -168,6 +170,7 @@ class UpdateProductRequest(BaseModel):
     saree_length: Decimal | None = None
     blouse_length: Decimal | None = None
     blouse_included: bool | None = None
+    care_instructions: str | None = None
     category_ids: list[UUID] | None = None
     is_active: bool | None = None
 

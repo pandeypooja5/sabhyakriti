@@ -204,6 +204,7 @@ class ProductApplicationService:
             saree_length=product.saree_length,
             blouse_length=product.blouse_length,
             blouse_included=product.blouse_included,
+            care_instructions=product.care_instructions,
             average_rating=product.average_rating,
             review_count=product.review_count,
             is_active=product.is_active,
@@ -367,6 +368,8 @@ class ProductApplicationService:
             updates["blouse_length"] = request.blouse_length
         if request.blouse_included is not None:
             updates["blouse_included"] = request.blouse_included
+        if request.care_instructions is not None:
+            updates["care_instructions"] = request.care_instructions
         if request.category_ids is not None:
             updates["category_ids"] = request.category_ids
         if request.is_active is not None:

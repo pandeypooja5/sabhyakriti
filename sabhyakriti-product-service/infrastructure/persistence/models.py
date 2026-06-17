@@ -87,6 +87,7 @@ class ProductModel(Base):
     saree_length: Mapped[Optional[Decimal]] = mapped_column(sa.Numeric(5, 2), nullable=True)
     blouse_length: Mapped[Optional[Decimal]] = mapped_column(sa.Numeric(5, 2), nullable=True)
     blouse_included: Mapped[bool] = mapped_column(sa.Boolean, nullable=False, default=False)
+    care_instructions: Mapped[Optional[str]] = mapped_column(sa.Text, nullable=True)
     average_rating: Mapped[Decimal] = mapped_column(
         sa.Numeric(3, 2), nullable=False, default=Decimal("0.00")
     )

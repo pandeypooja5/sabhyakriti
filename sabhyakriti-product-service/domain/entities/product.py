@@ -47,6 +47,7 @@ class Product:
     saree_length: Decimal | None = None
     blouse_length: Decimal | None = None
     blouse_included: bool = False
+    care_instructions: str | None = None
     images: list[ProductImage] = field(default_factory=list)
     category_ids: list[UUID] = field(default_factory=list)
 
