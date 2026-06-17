@@ -53,6 +53,7 @@ def _model_to_entity(row: ProductModel) -> Product:
         saree_length=row.saree_length,
         blouse_length=row.blouse_length,
         blouse_included=row.blouse_included,
+        care_instructions=row.care_instructions,
         images=images,
     )
 
@@ -287,6 +288,7 @@ class SQLAlchemyProductRepository(IProductRepository):
             saree_length=product.saree_length,
             blouse_length=product.blouse_length,
             blouse_included=product.blouse_included,
+            care_instructions=product.care_instructions,
             average_rating=product.average_rating,
             review_count=product.review_count,
             created_at=product.created_at,
