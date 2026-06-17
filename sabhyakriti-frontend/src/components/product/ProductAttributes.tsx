@@ -61,14 +61,14 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({ product }) => {
         </AccordionItem>
       )}
 
-      <AccordionItem title="Shipping & Returns">
-        <ul className="space-y-1">
-          <li>Free shipping on orders above ₹999</li>
-          <li>Standard delivery: 5-7 business days</li>
-          <li>Express delivery: 2-3 business days</li>
-          <li>Easy 30-day returns for unworn items</li>
-          <li>Exchange available within 15 days</li>
-        </ul>
+      <AccordionItem title="Shipping & Delivery">
+        <p className="leading-relaxed">
+          We offer <strong className="font-semibold text-gray-800">pan-India shipping</strong> on all orders. Your
+          saree will be packed with care and dispatched within{' '}
+          <strong className="font-semibold text-gray-800">2-4 business days</strong>. Delivery typically takes{' '}
+          <strong className="font-semibold text-gray-800">5-7 working days</strong>, depending on your location.
+          You'll receive tracking details as soon as your order is shipped.
+        </p>
       </AccordionItem>
     </div>
   );
