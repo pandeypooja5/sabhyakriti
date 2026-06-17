@@ -70,6 +70,33 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({ product }) => {
           You'll receive tracking details as soon as your order is shipped.
         </p>
       </AccordionItem>
+
+      <AccordionItem title="Return & Refund">
+        <div className="space-y-3 text-sm text-gray-600">
+          <p className="leading-relaxed">
+            We want you to be completely satisfied with your purchase. Here's how we handle returns and refunds:
+          </p>
+          <ul className="space-y-2 leading-relaxed">
+            <li>
+              Accepted only in case of a <strong className="font-semibold text-gray-800">wrong size</strong> or{' '}
+              <strong className="font-semibold text-gray-800">incorrect product delivered</strong>.
+            </li>
+            <li>
+              Provided <strong className="font-semibold text-gray-800">only if the product is damaged</strong> upon delivery.
+            </li>
+            <li>
+              <strong className="font-semibold text-gray-800">Unboxing video</strong> is required as proof for any return or refund request.
+            </li>
+            <li>
+              Return request must be submitted within{' '}
+              <strong className="font-semibold text-gray-800">24 Hours</strong> after receiving the order.
+            </li>
+          </ul>
+          <p className="leading-relaxed pt-1">
+            For assistance, please contact our support team with your order ID and issue details.
+          </p>
+        </div>
+      </AccordionItem>
     </div>
   );
 };
