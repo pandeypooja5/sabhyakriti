@@ -8,7 +8,6 @@ import PLPSearch from '@/components/product/PLPSearch';
 import PLPSort from '@/components/product/PLPSort';
 import ProductGrid from '@/components/product/ProductGrid';
 import PLPPagination from '@/components/product/PLPPagination';
-import Breadcrumb from '@/components/shared/Breadcrumb';
 
 const PLPPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,21 +47,13 @@ const PLPPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" data-testid="plp-page">
-      <Breadcrumb items={[{ label: 'Sarees' }]} />
-
-      <div className="flex items-center gap-4 mt-4 mb-4">
-        <h1 className="text-2xl font-playfair font-normal text-brand-text">All Sarees</h1>
-      </div>
-
-      {/* Filter bar + search + sort */}
-      <div className="flex flex-col gap-3 mb-6">
+      {/* Search + filter icon + sort */}
+      <div className="flex items-center gap-3 mb-6">
         <PLPFilters />
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1">
-            <PLPSearch />
-          </div>
-          <PLPSort />
+        <div className="flex-1">
+          <PLPSearch />
         </div>
+        <PLPSort />
       </div>
 
       {/* Products */}
