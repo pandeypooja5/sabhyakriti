@@ -61,7 +61,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <PLPPage /> },
       { path: 'sarees', element: <PLPPage /> },
       { path: 'sarees/:slug', element: <PDPPage /> },
       { path: 'cart', element: <CartPage /> },
