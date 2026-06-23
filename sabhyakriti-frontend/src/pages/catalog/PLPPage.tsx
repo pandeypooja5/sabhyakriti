@@ -53,6 +53,17 @@ const PLPPage: React.FC = () => {
         <meta name="description" content="Shop authentic handcrafted sarees at Sabhyakriti. Browse lehariya, bandhani, silk, chiffon & georgette sarees for weddings, festivals & parties. Free pan-India shipping." />
         <meta name="keywords" content="buy sarees online, lehariya sarees, bandhani sarees, silk sarees, banarasi sarees, linen sarees, tissue sarees, organza sarees, chiffon sarees, georgette sarees, Rajasthani sarees, wedding sarees, festive sarees, Jaipur sarees, gotta patti sarees, traditional Indian sarees" />
         <link rel="canonical" href="https://www.sabhyakriti.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Sabhyakriti" />
+        <meta property="og:title" content="Sabhyakriti — Buy Handcrafted Sarees Online" />
+        <meta property="og:description" content="Discover premium lehariya, bandhani, silk & georgette sarees. Crafted with tradition, delivered across India." />
+        <meta property="og:url" content="https://www.sabhyakriti.com/" />
+        <meta property="og:image" content="https://www.sabhyakriti.com/hero-sarees.png" />
+        <meta property="og:locale" content="en_IN" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sabhyakriti — Buy Handcrafted Sarees Online" />
+        <meta name="twitter:description" content="Discover premium lehariya, bandhani, silk & georgette sarees. Crafted with tradition, delivered across India." />
+        <meta name="twitter:image" content="https://www.sabhyakriti.com/hero-sarees.png" />
       </Helmet>
 
       {/* Search + filter icon + sort */}
