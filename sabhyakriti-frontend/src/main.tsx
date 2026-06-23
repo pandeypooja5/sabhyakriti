@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+import { HelmetProvider } from 'react-helmet-async';
 import { store } from '@/store/store';
 import App from './App';
 import './index.css';
@@ -11,6 +12,7 @@ if (!root) throw new Error('Root element not found');
 
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
+    <HelmetProvider>
     <Provider store={store}>
       <App />
       <Toaster
@@ -38,5 +40,6 @@ ReactDOM.createRoot(root).render(
         }}
       />
     </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );

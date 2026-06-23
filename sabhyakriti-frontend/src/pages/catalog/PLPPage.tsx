@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { fetchProducts, setFilters, setSearch, setSort, setPage } from '@/store/slices/productSlice';
 import type { ProductFilters } from '@/types';
@@ -47,6 +48,13 @@ const PLPPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" data-testid="plp-page">
+      <Helmet>
+        <title>Buy Handcrafted Sarees Online — Lehariya, Bandhani, Silk & More | Sabhyakriti</title>
+        <meta name="description" content="Shop authentic handcrafted sarees at Sabhyakriti. Browse lehariya, bandhani, silk, chiffon & georgette sarees for weddings, festivals & parties. Free pan-India shipping." />
+        <meta name="keywords" content="buy sarees online, lehariya sarees, bandhani sarees, silk sarees, banarasi sarees, linen sarees, tissue sarees, organza sarees, chiffon sarees, georgette sarees, Rajasthani sarees, wedding sarees, festive sarees, Jaipur sarees, gotta patti sarees, traditional Indian sarees" />
+        <link rel="canonical" href="https://www.sabhyakriti.com/" />
+      </Helmet>
+
       {/* Search + filter icon + sort */}
       <div className="flex items-center gap-3 mb-6">
         <PLPFilters />

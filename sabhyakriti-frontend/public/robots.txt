@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /checkout
+Disallow: /cart
+Disallow: /orders
+Disallow: /account
+Disallow: /auth/
+
+Sitemap: https://www.sabhyakriti.com/sitemap.xml

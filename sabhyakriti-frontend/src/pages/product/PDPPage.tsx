@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import type { Product } from '@/types';
 import { getProductBySlug } from '@/services/productService';
 import ImageGallery from '@/components/product/ImageGallery';
@@ -52,8 +53,43 @@ const PDPPage: React.FC = () => {
     { label: product.name },
   ];
 
+  const productUrl = `https://www.sabhyakriti.com/sarees/${product.slug}`;
+  const productImage = product.images?.[0]?.url ?? 'https://www.sabhyakriti.com/hero-sarees.png';
+  const fabricName = product.fabricCategories?.[0]?.name ?? 'Handcrafted';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description ?? `${fabricName} saree from Sabhyakriti. Premium handcrafted Indian saree with pan-India shipping.`,
+    image: productImage,
+    url: productUrl,
+    brand: { '@type': 'Brand', name: 'Sabhyakriti' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'INR',
+      price: product.price,
+      availability: product.stockQuantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: productUrl,
+      seller: { '@type': 'Organization', name: 'Sabhyakriti' },
+    },
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6" data-testid="pdp-page">
+      <Helmet>
+        <title>{`${product.name} — Buy ${fabricName} Saree Online | Sabhyakriti`}</title>
+        <meta name="description" content={`Buy ${product.name} online at Sabhyakriti. ${fabricName} saree handcrafted with care. Pan-India shipping, 5-7 working days delivery.`} />
+        <link rel="canonical" href={productUrl} />
+        <meta property="og:title" content={`${product.name} | Sabhyakriti`} />
+        <meta property="og:description" content={`${fabricName} saree — ${product.name}. Shop handcrafted sarees at Sabhyakriti.`} />
+        <meta property="og:image" content={productImage} />
+        <meta property="og:url" content={productUrl} />
+        <meta property="og:type" content="product" />
+        <meta property="product:price:amount" content={String(product.price)} />
+        <meta property="product:price:currency" content="INR" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+
       <Breadcrumb items={breadcrumbs} />
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
