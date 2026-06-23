@@ -55,7 +55,7 @@ const PDPPage: React.FC = () => {
 
   const productUrl = `https://www.sabhyakriti.com/sarees/${product.slug}`;
   const productImage = product.images?.[0]?.url ?? 'https://www.sabhyakriti.com/hero-sarees.png';
-  const fabricName = product.fabricCategories?.[0]?.name ?? 'Handcrafted';
+  const fabricName = product.fabric ?? product.fabricCategories?.[0]?.name ?? 'Handcrafted';
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
