@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Core pages -->
   <url>
     <loc>https://www.sabhyakriti.com/</loc>
     <changefreq>daily</changefreq>
@@ -10,4 +12,203 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?sort=newest</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?sort=popularity</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- By Fabric -->
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=banarasi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=silk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=kanjivaram</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=gajji-silk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=kora-silk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=dola-silk</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=bandhani</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=lehriya</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=gota-patti</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=organza</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=tissue</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=chiffon</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=georgette</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=linen</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=cotton</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=satin</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=chinnon</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?fabric=jamdani</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- By Occasion -->
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?occasion=wedding</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?occasion=festival</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?occasion=party</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?occasion=casual</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?occasion=office</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- By Heritage Region -->
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=rajasthan</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=bengal</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=gujarat</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=tamil-nadu</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=odisha</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/sarees?region=assam</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Static pages -->
+  <url>
+    <loc>https://www.sabhyakriti.com/size-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/faq</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/returns</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/shipping</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.sabhyakriti.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>
